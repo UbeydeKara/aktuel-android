@@ -9,10 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
+    "axios": "^0.21.1",
     "expo": "~48.0.18",
+    "expo-file-system": "~15.2.2",
+    "expo-font": "~11.1.1",
+    "expo-sharing": "~11.2.2",
     "expo-status-bar": "~1.4.4",
+    "moment": "^2.29.4",
     "react": "18.2.0",
-    "react-native": "0.71.8"
+    "react-native": "0.71.8",
+    "react-native-blob-util": "^0.18.3",
+    "react-native-gesture-handler": "~2.9.0",
+    "react-native-pinch-new": "^0.1.15",
+    "react-native-ssl-pinning": "^1.5.7",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
