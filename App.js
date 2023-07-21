@@ -1,11 +1,13 @@
 import {useFonts} from 'expo-font';
-import Navigator from "./navigation/Navigator";
-import {NavigatorProvider} from "./navigation/NavigatorProvider";
+import Navigator from "./section/Navigator";
+import {Provider} from 'react-redux';
+import store from "./redux/store";
+import {PublicSans_300Light, PublicSans_500Medium} from "@expo-google-fonts/public-sans";
 
 export default function App() {
-
     const [fontsLoaded] = useFonts({
-        'Belanosima': require('./assets/fonts/Belanosima-Regular.ttf'),
+        PublicSans_300Light,
+        PublicSans_500Medium
     });
 
     if (!fontsLoaded) {
@@ -13,7 +15,8 @@ export default function App() {
     }
 
     return (
-        <NavigatorProvider>
+        <Provider store={store}>
             <Navigator/>
-        </NavigatorProvider>);
+        </Provider>
+    );
 }

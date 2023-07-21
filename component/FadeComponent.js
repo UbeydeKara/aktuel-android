@@ -9,13 +9,15 @@ export default function FadeComponent(props) {
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: props.visible ? 1 : 0,
-            duration: 500,
+            duration: 250,
             useNativeDriver: true
         }).start();
     }, [props.visible]);
 
     return(
-        <Animated.View style={{ position: 'absolute', height: height, width: width, opacity: fadeAnim, zIndex: props.visible ? 1 : 0 }}>
+        <Animated.View needsOffscreenAlphaCompositing={true} style={{
+            position: 'absolute', height: height, width: width, opacity: fadeAnim, zIndex: props.visible ? 1 : 0
+        }}>
             {props.children}
         </Animated.View>
     );

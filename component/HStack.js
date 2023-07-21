@@ -4,8 +4,8 @@ export default function HStack({children, centerX, space, ...params}) {
     const viewStyle = {
         flexDirection: 'row',
         alignItems: "center",
-        gap: space || 0,
-        justifyContent: centerX ? 'center' : 'flex-start',
+        gap: isNaN(+space) ? 0 : space,
+        justifyContent: centerX ? 'center' : space === 'auto' ? 'space-between' :'flex-start',
         ...params.style
     }
     return(

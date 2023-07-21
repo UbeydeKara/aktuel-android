@@ -9,21 +9,25 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/public-sans": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
-    "axios": "^0.21.1",
+    "axios": "1.4.0",
     "expo": "~48.0.18",
-    "expo-file-system": "~15.2.2",
+    "expo-av": "~13.2.1",
     "expo-font": "~11.1.1",
+    "expo-image-manipulator": "~11.1.1",
     "expo-sharing": "~11.2.2",
     "expo-status-bar": "~1.4.4",
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
-    "react-native-blob-util": "^0.18.3",
     "react-native-gesture-handler": "~2.9.0",
-    "react-native-pinch-new": "^0.1.15",
-    "react-native-ssl-pinning": "^1.5.7",
-    "rn-fetch-blob": "^0.12.0"
+    "react-native-image-pan-zoom": "^2.1.12",
+    "react-native-svg": "13.4.0",
+    "react-redux": "^8.1.1",
+    "redux": "^4.2.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

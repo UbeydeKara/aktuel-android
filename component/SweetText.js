@@ -1,10 +1,10 @@
 import {Text} from "react-native";
 
-export default function SweetText({children, color, size, ...params}) {
+export default function SweetText({children, color, size, family, ...params}) {
     const textStyle = {
-        fontFamily: "Belanosima",
+        fontFamily: family || "PublicSans_500Medium",
         color: color || "#000",
-        fontSize: size || 16,
+        fontSize: size || 14,
         ...params.style
     }
 

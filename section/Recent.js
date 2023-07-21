@@ -1,21 +1,23 @@
+import {useState} from "react";
 import {FlatList, Image, RefreshControl, Text, TouchableOpacity} from "react-native";
-import {NavigatorContext} from "../navigation/NavigatorProvider";
-import {useContext, useEffect, useState} from "react";
-import CatalogService from "../service/catalog-service";
-import HStack from "../component/HStack";
-import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
-import {styles} from "../constant/style";
-import VStack from "../component/VStack";
-import {dateFormatter} from "../utils/dateFormatter";
-import SweetText from "../component/SweetText";
+import {useDispatch, useSelector} from "react-redux";
 
-const Item = ({item, switchPage}) => (
-    <TouchableOpacity onPress={e => switchPage(1, item)}
+import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
+
+import {getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
+import {switchPage} from "../redux/actions/NavigationAction";
+
+import {styles} from "../constant/style";
+import {dateFormatter} from "../utils/dateFormatter";
+import {HStack, SweetText, VStack} from "../component";
+
+const Item = ({item, handleSwitchPage}) => (
+    <TouchableOpacity onPress={e => handleSwitchPage("catalog", item)}
                       style={[styles.card, styles.shadowProp]}>
         <Image
             style={{width: '100%', height: '100%', borderRadius: 10}}
             source={{uri: item?.img_path}}/>
-        <HStack style={styles.card_footer} centerX={true} space={5}>
+        <HStack style={styles.card_footer} centerX space={5}>
             <MaterialIcons name="update" size={18} color="#fff"/>
             <SweetText color="white" size={14}>{dateFormatter(item?.deadline)}</SweetText>
         </HStack>
@@ -23,39 +25,33 @@ const Item = ({item, switchPage}) => (
 );
 
 export default function Recent({...params}) {
-    const [data, setData] = useState([{catalogID: 0}, {catalogID: 1}, {catalogID: 2}, {catalogID: 3}]);
-    const {switchPage} = useContext(NavigatorContext);
+    const {recentlyAdded} = useSelector(state => state.catalogReducer);
     const [refresh, setRefresh] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleSwitchPage = (key, item) => {
+        dispatch(switchPage(key, item));
+    }
 
     const renderItem = ({item}) => {
         return (
-            <Item item={item} switchPage={switchPage}/>
+            <Item item={item} handleSwitchPage={handleSwitchPage}/>
         );
     }
 
-    const getData = async() => {
-        setRefresh(true);
-        await CatalogService.getAll().then(
-            (res) => {
-                setData(res.data.data);
-                setRefresh(false);
-            }
-        )
+    const refreshData = () => {
+        dispatch(getCatalogsRecentlyAdded());
     }
 
-    useEffect(() => {
-        getData();
-    }, []);
-
     return (
-        <VStack>
+        <VStack space={10}>
             <HStack space={15}>
-                <FontAwesome5 name="calendar-week" size={20} color="black" />
+                <FontAwesome5 name="calendar-week" size={20} color="black"/>
                 <Text style={styles.subtitle}>Son Eklenenler</Text>
             </HStack>
             <FlatList
                 {...params}
-                data={data}
+                data={recentlyAdded}
                 renderItem={renderItem}
                 keyExtractor={item => item.catalogID}
                 numColumns={2}
@@ -63,7 +59,7 @@ export default function Recent({...params}) {
                 refreshControl={
                     <RefreshControl
                         refreshing={refresh}
-                        onRefresh={getData}
+                        onRefresh={refreshData}
                     />
                 }
             />

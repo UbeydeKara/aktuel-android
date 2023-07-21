@@ -21,8 +21,58 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20
     },
+    paginationDots: {
+        height: 10,
+        width: 10,
+        borderRadius: 10 / 2,
+        backgroundColor: 'orange',
+        marginHorizontal: 5,
+        elevation: 1
+    },
 
     // card
+    appBar: {
+        position: "absolute",
+        justifyContent: "space-between",
+        backgroundColor: "rgba(255,255,255,0.95)",
+        paddingTop: 30,
+        paddingBottom: 15,
+        paddingHorizontal: 10,
+        zIndex: 999,
+        left: 0,
+        right: 0,
+        shadowColor: "#8f8f8f",
+        elevation: 24
+    },
+    bottomBar: {
+        position: "absolute",
+        justifyContent: "space-evenly",
+        backgroundColor: "rgba(255,255,255,0.95)",
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        zIndex: 999,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        shadowColor: "#000",
+        elevation: 24
+    },
+    productCard: {
+        height: 250,
+        width: 300,
+        margin: 5,
+        alignSelf: "center",
+        borderRadius: 10,
+        shadowColor: "#8f8f8f",
+        elevation: 4
+    },
+    card_tmp: {
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: "#fff",
+        shadowColor: "#8f8f8f",
+        elevation: 4
+    },
     card: {
         width: "45%",
         height: 250,
@@ -39,28 +89,39 @@ export const styles = StyleSheet.create({
         borderBottomRightRadius: 10
     },
     shadowProp: {
-        shadowColor: "#000",
-        elevation: 24,
+        shadowColor: "#8f8f8f",
+        elevation: 4
+    },
+    marketCard: {
+        width: "45%",
+        height: 150,
+        marginVertical: 10,
+        marginHorizontal: 10,
+        borderRadius: 40,
+        padding: 20
     },
 
     // text
     subtitle: {
-        fontSize: 28,
-        fontFamily: 'Belanosima'
+        fontSize: 24,
+        fontFamily: 'PublicSans_500Medium'
     },
     subtitle2: {
         fontSize: 18,
-        fontFamily: 'Belanosima'
+        fontFamily: 'PublicSans_500Medium'
     },
     button_text: {
         color: "#fff",
-        fontFamily: 'Belanosima',
+        fontFamily: 'PublicSans_500Medium',
         fontSize: 18
     },
 
     // spacing
     py4: {
         paddingVertical: 40
+    },
+    pt4: {
+        paddingTop: 40
     },
     py2: {
         paddingVertical: 20

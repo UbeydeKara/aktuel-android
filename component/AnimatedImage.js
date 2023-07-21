@@ -1,9 +1,9 @@
 import React, {createRef, useCallback, useRef, useState} from 'react';
 import {Animated, View} from 'react-native';
-import {PanGestureHandler, PinchGestureHandler, State} from 'react-native-gesture-handler';
+import {GestureHandlerRootView, PanGestureHandler, PinchGestureHandler, State} from 'react-native-gesture-handler';
 
 
-const AnimatedImage = ({source}) => {
+const AnimatedImage = ({source, listRef}) => {
     const [panEnabled, setPanEnabled] = useState(false);
     const scale = useRef(new Animated.Value(1)).current;
     const translateX = useRef(new Animated.Value(0)).current;
@@ -59,32 +59,35 @@ const AnimatedImage = ({source}) => {
     }, []);
 
     return (
-        <View style={{overflow: "hidden"}}>
-            <PanGestureHandler
-                enabled
-                onGestureEvent={onPanEvent}
-                ref={panRef}
-                simultaneousHandlers={[pinchRef]}
-                minDist={0}
-                minDeltaY={100}
-                shouldCancelWhenOutside>
-                <Animated.View>
-                    <PinchGestureHandler
-                        ref={pinchRef}
-                        onGestureEvent={onPinchEvent}
-                        simultaneousHandlers={[panRef]}
-                        onHandlerStateChange={handlePinchStateChange}>
-                        <Animated.Image
-                            source={source}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                transform: [{scale}, {translateX}, {translateY}]
-                            }}
-                            resizeMode="contain"/>
-                    </PinchGestureHandler>
-                </Animated.View>
-            </PanGestureHandler>
+        <View style={{
+            height: 600, overflow: "hidden", borderRadius: 10
+        }}>
+            <GestureHandlerRootView>
+                <PanGestureHandler
+                    enabled={panEnabled}
+                    onGestureEvent={onPanEvent}
+                    ref={panRef}
+                    simultaneousHandlers={[pinchRef, listRef]}
+                    shouldCancelWhenOutside>
+                    <Animated.View>
+                        <PinchGestureHandler
+                            ref={pinchRef}
+                            onGestureEvent={onPinchEvent}
+                            simultaneousHandlers={[panRef, listRef]}
+                            onHandlerStateChange={handlePinchStateChange}>
+                            <Animated.Image
+                                source={source}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    borderRadius: 10,
+                                    transform: [{scale}, {translateX}, {translateY}]
+                                }}
+                                resizeMode="stretch"/>
+                        </PinchGestureHandler>
+                    </Animated.View>
+                </PanGestureHandler>
+            </GestureHandlerRootView>
         </View>
     );
 };

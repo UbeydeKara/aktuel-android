@@ -1,30 +1,24 @@
 import http from "./http-common";
 
-const serviceUrl = "/catalog"
+const catalogUrl = "/catalog"
+const marketUrl = "/market"
 
-const getAll = () => {
-    return http.get(serviceUrl);
+const getCatalogsRecentlyAdded = () => {
+    return http.get(catalogUrl + "/recently-added");
 };
 
-const getAllByMarket = (market) => {
-    return http.get(serviceUrl);
+const getCatalogsByMarket = (market) => {
+    return http.post(catalogUrl + "/market", market);
 };
 
-const save = (catalog) => {
-    return http.post(serviceUrl, catalog);
-}
-
-const deleteByIds = (catalogIds) => {
-    return http.delete(serviceUrl, {
-        params: {catalogId: catalogIds}
-    })
+const getMarkets = () => {
+    return http.get(marketUrl);
 }
 
 const CatalogService = {
-    getAll,
-    getAllByMarket,
-    save,
-    deleteByIds
+    getCatalogsRecentlyAdded,
+    getCatalogsByMarket,
+    getMarkets
 };
 
 export default CatalogService;
