@@ -19,10 +19,6 @@ export default function Home() {
                     <SweetText size={32} family="PublicSans_300Light">Mutlu</SweetText>
                     <SweetText size={32}>{todayMessage()}</SweetText>
                 </VStack>
-                {/*<TouchableOpacity style={{marginLeft: 'auto'}}*/}
-                {/*                  onPress={e => Alert.alert("Aktüel MarketCatalogs App from Hatitech")}>*/}
-                {/*    <Feather name="info" size={34} color="black" />*/}
-                {/*</TouchableOpacity>*/}
             </HStack>
 
             {/*Carousel*/}

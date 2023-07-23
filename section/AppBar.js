@@ -8,7 +8,7 @@ export default function AppBar({title, onShare}) {
     const dispatch = useDispatch();
 
     const handlePageSwitch = () => {
-        dispatch(switchPage("home"));
+        dispatch(switchPage("back"));
     }
 
     return (

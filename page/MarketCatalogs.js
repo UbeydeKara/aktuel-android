@@ -21,8 +21,8 @@ const Item = ({item, handlePageSwitch}) => (
             style={{width: '100%', height: '100%', borderRadius: 10}}
             source={{uri: item?.img_path}} resizeMode="stretch"/>
         <HStack style={styles.card_footer} centerX={true} space={5}>
-            <MaterialIcons name="update" size={22} color="#fff"/>
-            <SweetText color="white" size={16}>{dateFormatter(item?.deadline)}</SweetText>
+            <MaterialIcons name="update" size={18} color="#fff"/>
+            <SweetText color="white" size={14}>{dateFormatter(item?.deadline)}</SweetText>
         </HStack>
     </TouchableOpacity>
 );
@@ -35,7 +35,7 @@ export default function MarketCatalogs({...params}) {
     const dispatch = useDispatch();
 
     const handlePageSwitch = (key, item) => {
-        dispatch(switchPage("catalog", item));
+        dispatch(switchPage(key, item));
     }
 
     const renderItem = ({item}) => {
@@ -56,7 +56,7 @@ export default function MarketCatalogs({...params}) {
     return (
         <VStack style={[styles.px2, styles.py4]} space={15}>
             <HStack space={15}>
-                <IconButton name="chevron-back" onPress={() => handlePageSwitch("home")}/>
+                <IconButton name="chevron-back" onPress={() => handlePageSwitch("back")}/>
                 <SvgCssUri
                     width="20%"
                     height="80%"

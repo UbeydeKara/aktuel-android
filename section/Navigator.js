@@ -3,12 +3,12 @@ import {View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 
 import {StatusBar} from "expo-status-bar";
-import {FadeComponent} from "../component";
+import {Alert, PageTransition} from "../component";
 import {Catalog, Home, MarketCatalogs, Markets, Settings} from "../page";
-import {BottomBar} from "./index";
 
 import {getMarkets} from "../redux/actions/MarketAction";
 import {getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
+import BottomBar from "./BottomBar";
 
 export default function Navigator() {
     const {pageKey} = useSelector(state => state.navigationReducer);
@@ -21,22 +21,22 @@ export default function Navigator() {
 
     return (
         <View style={{flex: 1, backgroundColor: "#F8F6FA"}}>
-            <FadeComponent visible={pageKey === "home"}>
+            <PageTransition isActive={pageKey === "home"}>
                 <Home/>
-            </FadeComponent>
-            <FadeComponent visible={pageKey === "catalog"}>
+            </PageTransition>
+            <PageTransition isActive={pageKey === "catalog"}>
                 <Catalog/>
-            </FadeComponent>
-            <FadeComponent visible={pageKey === "market_catalogs"}>
+            </PageTransition>
+            <PageTransition isActive={pageKey === "market_catalogs"}>
                 <MarketCatalogs/>
-            </FadeComponent>
-            <FadeComponent visible={pageKey === "markets"}>
+            </PageTransition>
+            <PageTransition isActive={pageKey === "markets"}>
                 <Markets/>
-            </FadeComponent>
-            <FadeComponent visible={pageKey === "settings"}>
+            </PageTransition>
+            <PageTransition isActive={pageKey === "settings"}>
                 <Settings/>
-            </FadeComponent>
-            {/*<Alert variant="warning" message="İnternet bağlantınız yok"/>*/}
+            </PageTransition>
+            <Alert/>
             {/*StatusBar*/}
             <BottomBar/>
             <StatusBar style="auto"/>

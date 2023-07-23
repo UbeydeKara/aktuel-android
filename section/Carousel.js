@@ -8,6 +8,7 @@ import {SvgCssUri} from "react-native-svg";
 import {useDispatch, useSelector} from "react-redux";
 import {selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
+import Skeleton from "../component/Skeleton";
 
 export default function Carousel() {
     const {markets} = useSelector(state => state.marketReducer);
@@ -25,14 +26,7 @@ export default function Carousel() {
 
     const Item = ({item}) => (
         <TouchableOpacity
-            style={[{
-                width: 80,
-                height: 80,
-                margin: 5,
-                backgroundColor: item?.tint,
-                padding: 10,
-                borderRadius: 30
-            }, styles.shadowProp]}
+            style={[styles.carouselItem, {backgroundColor: item?.tint}]}
             onPress={() => handleSelect(item)}>
             <SvgCssUri
                 width="100%"
@@ -43,9 +37,7 @@ export default function Carousel() {
     );
 
     const renderItem = ({item}) => {
-        return (
-            <Item item={item}/>
-        );
+        return item.marketID < 0 ? <Skeleton styleProp={styles.carouselItem}/> : <Item item={item}/>;
     }
 
     return (

@@ -5,7 +5,7 @@ import * as Sharing from 'expo-sharing';
 import * as ImageManipulator from "expo-image-manipulator";
 import {Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
 
-import {AppBar} from "../section";
+import AppBar from "../section/AppBar";
 import {HStack, SweetText, VStack} from "../component";
 import {styles} from "../constant/style";
 import {dateFormatter} from "../utils/dateFormatter";
@@ -75,10 +75,11 @@ export default function Catalog() {
                             <MaterialCommunityIcons name="calendar-end" size={22} color="black"/>
                             <SweetText size={16}>Kampanya Bitiş: {dateFormatter(navProps?.deadline)}</SweetText>
                         </HStack>
-                        <HStack space={5}>
-                            <Entypo name="dropbox" size={22} color="black"/>
-                            <SweetText size={24}>Ürünler</SweetText>
-                        </HStack>
+                        {navProps?.products?.length > 0 ?
+                            <HStack space={5}>
+                                <Entypo name="dropbox" size={22} color="black"/>
+                                <SweetText size={24}>Ürünler</SweetText>
+                            </HStack> : null}
                     </VStack>
                 }
                 contentContainerStyle={{paddingVertical: 110, paddingHorizontal: 20}}

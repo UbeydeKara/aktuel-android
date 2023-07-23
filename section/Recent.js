@@ -10,6 +10,7 @@ import {switchPage} from "../redux/actions/NavigationAction";
 import {styles} from "../constant/style";
 import {dateFormatter} from "../utils/dateFormatter";
 import {HStack, SweetText, VStack} from "../component";
+import Skeleton from "../component/Skeleton";
 
 const Item = ({item, handleSwitchPage}) => (
     <TouchableOpacity onPress={e => handleSwitchPage("catalog", item)}
@@ -34,17 +35,20 @@ export default function Recent({...params}) {
     }
 
     const renderItem = ({item}) => {
-        return (
-            <Item item={item} handleSwitchPage={handleSwitchPage}/>
-        );
+        return item.catalogID < 0 ? <Skeleton styleProp={styles.card}/> : <Item item={item} handleSwitchPage={handleSwitchPage}/>
     }
 
     const refreshData = () => {
-        dispatch(getCatalogsRecentlyAdded());
+        setRefresh(true);
+        dispatch(getCatalogsRecentlyAdded()).finally(
+            () => {
+                setRefresh(false);
+            }
+        )
     }
 
     return (
-        <VStack space={10}>
+        <VStack space={10} style={{paddingBottom: 100}}>
             <HStack space={15}>
                 <FontAwesome5 name="calendar-week" size={20} color="black"/>
                 <Text style={styles.subtitle}>Son Eklenenler</Text>

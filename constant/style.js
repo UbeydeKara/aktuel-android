@@ -10,24 +10,38 @@ export const styles = StyleSheet.create({
     vertical: {
         flexDirection: "column"
     },
-    flat_button: {
-        backgroundColor: "#000",
-        alignSelf: 'flex-start',
-        paddingHorizontal: 40,
-        paddingVertical: 10,
-        borderRadius: 20
-    },
     icon_button: {
         padding: 10,
         borderRadius: 20
     },
-    paginationDots: {
-        height: 10,
-        width: 10,
-        borderRadius: 10 / 2,
-        backgroundColor: 'orange',
-        marginHorizontal: 5,
-        elevation: 1
+
+    // carousel
+    carouselItem: {
+        width: 80,
+        height: 80,
+        margin: 5,
+        padding: 10,
+        borderRadius: 30,
+        shadowColor: "#8f8f8f",
+        elevation: 4
+    },
+
+    // alert
+    alertStyle: {
+        position: "absolute",
+        paddingVertical: 10,
+        paddingLeft: 20,
+        paddingRight: 10,
+        marginHorizontal: 50,
+        borderRadius: 20,
+        left: 0,
+        right: 0,
+        bottom: 80,
+        alignSelf: 'center',
+        zIndex: 1,
+        backgroundColor: "rgb(255, 247, 205)",
+        shadowColor: "#8f8f8f",
+        elevation: 4
     },
 
     // card
@@ -66,18 +80,12 @@ export const styles = StyleSheet.create({
         shadowColor: "#8f8f8f",
         elevation: 4
     },
-    card_tmp: {
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: "#fff",
-        shadowColor: "#8f8f8f",
-        elevation: 4
-    },
     card: {
         width: "45%",
         height: 250,
         marginVertical: 10,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        borderRadius: 10
     },
     card_footer: {
         height: 40,
