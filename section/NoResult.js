@@ -8,14 +8,15 @@ import {IconButton, SweetText, VStack} from "../component";
 import {useSelector} from "react-redux";
 
 const playStyle = {
-  position: "absolute",
-  bottom: 15,
-  right: 15
+    position: "absolute",
+    bottom: 15,
+    right: 15
 };
 
 export default function NoResult({resultSize}) {
     const [sound, setSound] = useState();
     const {pageKey} = useSelector(state => state.navigationReducer);
+    const {text} = useSelector(state => state.settingsReducer);
 
     async function playSound() {
         const {sound} = await Audio.Sound.createAsync(require('../assets/static/meow.mp3')
@@ -34,21 +35,17 @@ export default function NoResult({resultSize}) {
     }, [pageKey]);
 
     return (
-        <View>
-            {resultSize === 0 ?
-                <VStack space={15} centerX>
-                    <View style={{overflow: "hidden", borderRadius: 50}}>
-                        <Image style={{height: 400, width: 300}} onTouchStart={playSound}
-                               source={require("../assets/static/cat-sad.gif")}/>
-                        <IconButton size={40} color="whitesmoke" name="play-outline" style={playStyle} onPress={playSound}/>
-                    </View>
-                    <SweetText size={26} style={{textAlign: "center"}}>
-                        Aradığınız markete ait güncel katalog bulamadık
-                    </SweetText>
-                    <FontAwesome5 name="sad-cry" size={50} color="orange"/>
-                </VStack>
-                : null}
-        </View>
+        <VStack space={15} centerX>
+            <View style={{overflow: "hidden", borderRadius: 50}}>
+                <Image style={{height: 400, width: 300}} onTouchStart={playSound}
+                       source={require("../assets/static/cat-sad.gif")}/>
+                <IconButton size={40} color="whitesmoke" name="play-outline" style={playStyle} onPress={playSound}/>
+            </View>
+            <SweetText size={26} style={{textAlign: "center"}}>
+                {text.noResultDialog}
+            </SweetText>
+            <FontAwesome5 name="sad-cry" size={50} color="orange"/>
+        </VStack>
 
     );
 }

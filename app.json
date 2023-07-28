@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "aktuel_market",
+    "name": "Aktüel Market",
     "slug": "aktuel_market",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1D1E20"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,17 +20,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.hatitech.aktuel_market"
+        "backgroundColor": "#1D1E20"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "8d81dae7-8d45-4573-bfa2-fcec3b3776e1"
-      }
     }
   }
 }

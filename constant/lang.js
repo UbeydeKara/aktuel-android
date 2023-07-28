@@ -1,8 +1,48 @@
 export const en_US = {
-  homepage: "Home Page"
+    // bottom_bar
+    homepage: "Home",
+    markets: "Markets",
+    settings: "Settings",
+
+    // settings_page
+    language: "Language",
+    appearance: "Appearance",
+    light: "Light",
+    dark: "Dark",
+
+    // homepage
+    happy: "Happy",
+    recentlyAdded: "Recently Added",
+
+    // catalog
+    offerStart: "Offer Starts At",
+    offerEnd: "Offer Ends At",
+    products: "Products",
+    shareDialog: "Share catalogs",
+    noResultDialog: "We could not find an up-to-date catalog for the market you are looking for"
 };
 export const tr_TR = {
-    homepage: "Ana Sayfa"
+    // bottom_bar
+    homepage: "Ana Sayfa",
+    markets: "Marketler",
+    settings: "Ayarlar",
+
+    // settings_page
+    language: "Dil",
+    appearance: "Görünüm",
+    light: "Açık",
+    dark: "Koyu",
+
+    // homepage
+    happy: "Mutlu",
+    recentlyAdded: "Son Eklenenler",
+
+    // catalog
+    offerStart: "Kampanya Başlangıç",
+    offerEnd: "Kampanya Bitiş",
+    products: "Ürünler",
+    shareDialog: "Katalogları paylaş",
+    noResultDialog: "Aradığınız markete ait güncel katalog bulamadık"
 };
 
 export const selectLang = (lang) => lang === "tr_TR" ? tr_TR : en_US;

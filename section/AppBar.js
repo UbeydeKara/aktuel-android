@@ -1,11 +1,10 @@
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {switchPage} from "../redux/actions/NavigationAction";
-
-import {styles} from "../constant/style";
 import {HStack, IconButton, SweetText} from "../component";
 
 export default function AppBar({title, onShare}) {
     const dispatch = useDispatch();
+    const {styles} = useSelector(state => state.settingsReducer);
 
     const handlePageSwitch = () => {
         dispatch(switchPage("back"));

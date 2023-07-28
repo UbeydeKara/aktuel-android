@@ -1,16 +1,22 @@
-import {Animated, Text} from "react-native";
+import {Animated} from "react-native";
 import {useEffect, useState} from "react";
 import HStack from "./HStack";
 import {FontAwesome} from "@expo/vector-icons";
 import IconButton from "./IconButton";
 import {useSelector} from "react-redux";
 import SweetText from "./SweetText";
-import {styles} from "../constant/style";
 
 export default function Alert() {
+    const [open, setOpen] = useState(false);
     const [scaleValue] = useState(new Animated.Value(0));
     const {id, message} = useSelector(state => state.alertReducer);
-    const scaleStyle = {transform: [{scaleX: scaleValue}, {scaleY: scaleValue}]};
+    const {styles} = useSelector(state => state.settingsReducer);
+
+    const scaleStyle = {
+        transform: [{scaleX: scaleValue}, {scaleY: scaleValue}],
+        elevation: open ? 4 : 0,
+        zIndex: open ? 1 : -1
+    };
 
     const handleClose = () => {
         Animated.spring(scaleValue, {
@@ -18,6 +24,7 @@ export default function Alert() {
             duration: 500,
             useNativeDriver: true,
         }).start();
+        setOpen(false);
     }
 
     useEffect(() => {
@@ -27,6 +34,7 @@ export default function Alert() {
             duration: 500,
             useNativeDriver: true,
         }).start();
+        setOpen(true);
     }, [id]);
 
     return(

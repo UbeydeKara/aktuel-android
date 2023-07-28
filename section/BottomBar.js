@@ -1,5 +1,4 @@
 import {TouchableOpacity} from "react-native";
-import {styles} from "../constant/style";
 import HStack from "../component/HStack";
 import {SweetText} from "../component";
 import {FontAwesome5, Ionicons} from "@expo/vector-icons";
@@ -7,11 +6,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {switchPage} from "../redux/actions/NavigationAction";
 
 const barItem = (item, dispatch, isActive) => {
+    const {styles} = useSelector(state => state.settingsReducer);
     const textColor = isActive ? "orange" : "gray";
+
     const bgStyle = {
-        backgroundColor: isActive ? "#FAE1BE" : "transparent",
-        padding: 12,
-        borderRadius: 25
+        ...styles.navButton,
+        backgroundColor: isActive ? styles.navButton.backgroundColor : "transparent"
     };
 
     const handleSwitchPage = () => {
@@ -29,13 +29,13 @@ const barItem = (item, dispatch, isActive) => {
 
 export default function BottomBar() {
     const {pageKey} = useSelector(state => state.navigationReducer);
-    const {text} = useSelector(state => state.settingsReducer);
+    const {text, styles} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
 
     const elements = [
         {key: "home", title: text.homepage, icon: "home"},
-        {key: "markets", title: "Marketler", icon: "store"},
-        {key: "settings", title: "Ayarlar", icon: "settings"}];
+        {key: "markets", title: text.markets, icon: "store"},
+        {key: "settings", title: text.settings, icon: "settings"}];
 
     return (
         <HStack style={styles.bottomBar}>

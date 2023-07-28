@@ -1,53 +1,70 @@
-import {Alert, Dimensions, FlatList, Image, View} from "react-native";
+import {Dimensions, FlatList, Image} from "react-native";
 import {useSelector} from "react-redux";
 
-import * as Sharing from 'expo-sharing';
-import * as ImageManipulator from "expo-image-manipulator";
 import {Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
 
 import AppBar from "../section/AppBar";
 import {HStack, SweetText, VStack} from "../component";
-import {styles} from "../constant/style";
-import {dateFormatter} from "../utils/dateFormatter";
+import {dateFormatter, formatMultipleDate} from "../utils/dateFormatter";
 
 import ImageZoom from 'react-native-image-pan-zoom';
+import {useRef} from "react";
+import Share from 'react-native-share';
 
-const Item = ({item}) => (
-    <View style={styles.productCard}>
-        <Image
-            style={{width: '100%', height: '100%', borderRadius: 10, resizeMode: "contain"}}
-            source={{uri: item?.img_path}}/>
-    </View>
-);
+const Item = ({item, styles, width, height}) => {
+    const scaleValue = useRef(1);
 
-const renderItem = ({item}) => {
     return (
-        <Item item={item}/>
-    );
+        <ImageZoom cropWidth={width}
+                   cropHeight={height}
+                   imageWidth={width}
+                   imageHeight={height}
+                   style={styles.productCard}
+                   onStartShouldSetPanResponder={(e) => {
+                       return e.nativeEvent.touches.length === 2 || scaleValue.current > 1;
+                   }}
+                   onMove={({scale}) => {
+                       scaleValue.current = scale;
+                   }}>
+            <Image style={styles.imageContainer}
+                   source={{uri: item}}/>
+        </ImageZoom>
+    )
 }
 
 const {width, height} = Dimensions.get("screen");
 
 export default function Catalog() {
     const {navProps} = useSelector(state => state.navigationReducer);
+    const {styles, text, lang} = useSelector(state => state.settingsReducer);
+
     const appBarTitle =
         navProps?.market?.title + ": "
-        + dateFormatter(navProps?.startAt, "DD")
-        + "-"
-        + dateFormatter(navProps?.deadline, "DD MMMM");
+        + formatMultipleDate(navProps?.startAt, navProps?.deadline, lang)
+
+    const catalogItem = ({item}) => {
+        return (
+            <Item item={item} styles={styles} height={(height - 330)} width={(width - 50)}/>
+        );
+    }
+
+    const productItem = ({item}) => {
+        return (
+            <Item item={item} styles={styles} height={250} width={300}/>
+        );
+    }
 
     const onShare = async () => {
+        const shareOptions = {
+            title: text.shareDialog,
+            urls: navProps?.images,
+            failOnCancel: false,
+        };
+
         try {
-            const image_obj = await ImageManipulator.manipulateAsync(navProps?.img_path);
-
-            const options = {
-                mimeType: 'image/png',
-                dialogTitle: navProps?.market?.title + " marketindeki ürünleri paylaş"
-            }
-
-            await Sharing.shareAsync(image_obj.uri, options);
+            const ShareResponse = await Share.open(shareOptions);
         } catch (error) {
-            Alert.alert(error.message);
+            console.log('Error on sharing => ', error);
         }
     };
 
@@ -56,38 +73,36 @@ export default function Catalog() {
             <AppBar
                 title={appBarTitle}
                 onShare={onShare}/>
+
             <FlatList
-                ListHeaderComponent={
+                contentContainerStyle={{paddingVertical: 110, paddingHorizontal: 20}}
+                data={navProps?.images}
+                renderItem={catalogItem}
+                keyExtractor={(item, index) => index}
+                ListFooterComponent={
                     <VStack space={15}>
-                        <ImageZoom cropWidth={width - 40}
-                                   cropHeight={height - 320}
-                                   imageWidth={width - 40}
-                                   imageHeight={height - 320}
-                                   style={{borderRadius: 10}}>
-                            <Image style={{width: "100%", height: "100%", resizeMode: "stretch"}}
-                                   source={{uri: navProps?.img_path}}/>
-                        </ImageZoom>
-                        <HStack space={5}>
-                            <MaterialCommunityIcons name="calendar-start" size={22} color="black"/>
-                            <SweetText size={16}>Kampanya Başlangıç: {dateFormatter(navProps?.startAt)}</SweetText>
+                        <HStack space={5} mt={1}>
+                            <MaterialCommunityIcons name="calendar-start" size={22} color={styles.sweet_text.color}/>
+                            <SweetText size={16}>{text.offerStart}: {dateFormatter(navProps?.startAt, lang)}</SweetText>
                         </HStack>
                         <HStack space={5}>
-                            <MaterialCommunityIcons name="calendar-end" size={22} color="black"/>
-                            <SweetText size={16}>Kampanya Bitiş: {dateFormatter(navProps?.deadline)}</SweetText>
+                            <MaterialCommunityIcons name="calendar-end" size={22} color={styles.sweet_text.color}/>
+                            <SweetText size={16}>{text.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
                         </HStack>
-                        {navProps?.products?.length > 0 ?
-                            <HStack space={5}>
-                                <Entypo name="dropbox" size={22} color="black"/>
-                                <SweetText size={24}>Ürünler</SweetText>
-                            </HStack> : null}
+                        <FlatList
+                            data={navProps?.products}
+                            renderItem={productItem}
+                            keyExtractor={(item, index) => index}
+                            ListHeaderComponent={
+                                <HStack space={5} my={1}>
+                                    <Entypo name="dropbox" size={22} color={styles.sweet_text.color}/>
+                                    <SweetText size={24}>{text.products}</SweetText>
+                                </HStack>
+                            }
+                        />
                     </VStack>
                 }
-                contentContainerStyle={{paddingVertical: 110, paddingHorizontal: 20}}
-                data={navProps?.products}
-                renderItem={renderItem}
-                keyExtractor={item => item.productID}
             />
         </>
     )
-        ;
 }

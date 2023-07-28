@@ -7,12 +7,12 @@ const getCatalogsRecentlyAdded = () => {
     return http.get(catalogUrl + "/recently-added");
 };
 
-const getCatalogsByMarket = (market) => {
-    return http.post(catalogUrl + "/market", market);
+const getCatalogsByMarket = (marketID) => {
+    return http.get(catalogUrl + "/market/" + marketID);
 };
 
 const getMarkets = () => {
-    return http.get(marketUrl);
+    return http.get(marketUrl + "/findAll");
 }
 
 const CatalogService = {

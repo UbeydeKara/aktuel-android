@@ -12,6 +12,7 @@ import BottomBar from "./BottomBar";
 
 export default function Navigator() {
     const {pageKey} = useSelector(state => state.navigationReducer);
+    const {theme, styles} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,7 +21,7 @@ export default function Navigator() {
     }, []);
 
     return (
-        <View style={{flex: 1, backgroundColor: "#F8F6FA"}}>
+        <View style={styles.container}>
             <PageTransition isActive={pageKey === "home"}>
                 <Home/>
             </PageTransition>
