@@ -9,7 +9,9 @@ import {dateFormatter, formatMultipleDate} from "../utils/dateFormatter";
 
 import ImageZoom from 'react-native-image-pan-zoom';
 import {useRef} from "react";
+import {BannerAd, BannerAdSize, TestIds} from "react-native-google-mobile-ads";
 import Share from 'react-native-share';
+import base64File from "../utils/base64Converter";
 
 const Item = ({item, styles, width, height}) => {
     const scaleValue = useRef(1);
@@ -54,15 +56,24 @@ export default function Catalog() {
         );
     }
 
+
+
     const onShare = async () => {
+        const base64Images = [];
+
+        for (const url of navProps?.images) {
+            const base64Image = await base64File(url);
+            base64Images.push(base64Image);
+        }
+
         const shareOptions = {
             title: text.shareDialog,
-            urls: navProps?.images,
+            urls: base64Images,
             failOnCancel: false,
         };
 
         try {
-            const ShareResponse = await Share.open(shareOptions);
+            await Share.open(shareOptions);
         } catch (error) {
             console.log('Error on sharing => ', error);
         }
@@ -88,6 +99,15 @@ export default function Catalog() {
                         <HStack space={5}>
                             <MaterialCommunityIcons name="calendar-end" size={22} color={styles.sweet_text.color}/>
                             <SweetText size={16}>{text.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
+                        </HStack>
+                        <HStack centerX mt={1}>
+                            <BannerAd
+                                unitId={TestIds.BANNER}
+                                size={BannerAdSize.LARGE_BANNER}
+                                requestOptions={{
+                                    requestNonPersonalizedAdsOnly: true,
+                                }}
+                            />
                         </HStack>
                         <FlatList
                             data={navProps?.products}

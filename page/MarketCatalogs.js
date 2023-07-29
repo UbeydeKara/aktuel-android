@@ -29,9 +29,11 @@ const Item = ({item, handlePageSwitch, styles, lang}) => (
 export default function MarketCatalogs({...params}) {
     const [refresh, setRefresh] = useState(false);
     const {styles, lang} = useSelector(state => state.settingsReducer);
-    const {selectedMarket} = useSelector(state => state.marketReducer);
+    const {selectedMarket, markets} = useSelector(state => state.marketReducer);
     const {catalogsByMarket} = useSelector(state => state.catalogReducer);
     const dispatch = useDispatch();
+
+    const market = markets.find(x => x.marketID === selectedMarket);
 
     const handlePageSwitch = (key, item) => {
         dispatch(switchPage(key, item));
@@ -59,8 +61,7 @@ export default function MarketCatalogs({...params}) {
                 <SvgCssUri
                     width="20%"
                     height="80%"
-                    uri={selectedMarket?.
-                        path}
+                    uri={market?.img_path}
                 />
             </HStack>
             <FlatList
@@ -69,7 +70,6 @@ export default function MarketCatalogs({...params}) {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index}
                 numColumns={2}
-                contentContainerStyle={{minHeight: catalogsByMarket.length > 0 ? 1400 : 0}}
                 refreshControl={
                     <RefreshControl
                         refreshing={refresh}

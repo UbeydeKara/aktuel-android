@@ -6,8 +6,8 @@ export default function HStack({children, centerX, space, mt, my, ...params}) {
         alignItems: "center",
         gap: isNaN(+space) ? 0 : space,
         justifyContent: centerX ? 'center' : space === 'auto' ? 'space-between' :'flex-start',
-        marginTop: mt ? mt * 10 : 0,
-        marginVertical: my ? my * 10 : 0,
+        marginTop: mt && mt * 10,
+        marginVertical: my && my * 10,
         ...params.style
     }
     return(

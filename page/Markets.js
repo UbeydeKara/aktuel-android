@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {FlatList, RefreshControl, TouchableOpacity} from "react-native";
+import {Dimensions, FlatList, RefreshControl, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 
 import {HStack, IconButton, SweetText, VStack} from "../component";
@@ -8,6 +8,9 @@ import {SvgCssUri} from "react-native-svg";
 import {getMarkets, selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
 import Skeleton from "../component/Skeleton";
+import {BannerAd, BannerAdSize, TestIds} from "react-native-google-mobile-ads";
+
+const {height} = Dimensions.get("screen");
 
 const Item = ({item, handleSelect, styles}) => (
     <TouchableOpacity onPress={() => handleSelect(item)}
@@ -61,12 +64,21 @@ export default function Markets() {
                 renderItem={renderItem}
                 keyExtractor={item => item.marketID}
                 numColumns={2}
-                contentContainerStyle={{minHeight: 1400}}
+                style={{height: height - 280}}
                 showsVerticalScrollIndicator={false}
                 refreshControl={
                 <RefreshControl refreshing={refresh} onRefresh={refreshData}/>
                 }
             />
+            <HStack centerX mt={1}>
+                <BannerAd
+                    unitId={TestIds.BANNER}
+                    size={BannerAdSize.LARGE_BANNER}
+                    requestOptions={{
+                        requestNonPersonalizedAdsOnly: true,
+                    }}
+                />
+            </HStack>
         </VStack>
     );
 }

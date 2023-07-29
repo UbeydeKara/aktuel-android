@@ -17,7 +17,7 @@ export const darkStyle = {
     shadowColor: "#000",
     dividerColor: "gray",
     barBg: "#26282CF2",
-    buttonBg: "#c4aa7d"
+    buttonBg: "#817669"
 }
 
 export const currentStyle = {
