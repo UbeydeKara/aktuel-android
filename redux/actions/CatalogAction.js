@@ -25,6 +25,7 @@ export const getCatalogsRecentlyAdded = () => async (dispatch) => {
         });
         return Promise.resolve(res.data.data);
     } catch (err) {
+        console.log(err)
         dispatch(show_alert("İnternet bağlantısı yok", "warning"));
         return Promise.reject([]);
     }

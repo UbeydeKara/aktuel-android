@@ -9,12 +9,17 @@ import {selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
 import Skeleton from "../component/Skeleton";
 import {SweetText} from "../component";
+import {useCallback, useMemo} from "react";
+import {getMessages} from "../constant/lang";
+import {getStyles} from "../constant/style";
 
 export default function Carousel() {
     const {markets} = useSelector(state => state.marketReducer);
-    const {styles, text} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
 
+    const {theme, lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     const handleSelect = (item) => {
         dispatch(selectMarket(item.marketID));
@@ -25,7 +30,7 @@ export default function Carousel() {
         dispatch(switchPage(key, item));
     }
 
-    const Item = ({item}) => (
+    const Item = useCallback(({item}) => (
         <TouchableOpacity
             style={[styles.carouselItem, {backgroundColor: item?.tint}]}
             onPress={() => handleSelect(item)}>
@@ -35,18 +40,18 @@ export default function Carousel() {
                 uri={item?.img_path}
             />
         </TouchableOpacity>
-    );
+    ), [markets]);
 
-    const renderItem = ({item}) => {
+    const renderItem = useCallback(({item}) => {
         return item.marketID < 0 ? <Skeleton styleProp={styles.carouselItem}/> : <Item item={item}/>;
-    }
+    }, [markets]);
 
     return (
-        <VStack space={10}>
+        <VStack>
             <HStack space="auto">
                 <HStack space={15}>
                     <FontAwesome name="shopping-cart" size={22} color={styles.sweet_text.color}/>
-                    <SweetText size={24}>{text.markets}</SweetText>
+                    <SweetText size={24}>{messages.markets}</SweetText>
                 </HStack>
                 <IconButton name="arrow-forward" size={28} onPress={() => handlePageSwitch("markets")}/>
             </HStack>

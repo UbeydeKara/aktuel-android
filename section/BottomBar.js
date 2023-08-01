@@ -4,11 +4,15 @@ import {SweetText} from "../component";
 import {FontAwesome5, Ionicons} from "@expo/vector-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {switchPage} from "../redux/actions/NavigationAction";
+import {useMemo} from "react";
+import {getMessages} from "../constant/lang";
+import {getStyles} from "../constant/style";
 
 const barItem = (item, dispatch, isActive) => {
-    const {styles} = useSelector(state => state.settingsReducer);
-    const textColor = isActive ? "orange" : "gray";
+    const {theme} = useSelector(state => state.settingsReducer);
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
+    const textColor = isActive ? "orange" : "gray";
     const bgStyle = {
         ...styles.navButton,
         backgroundColor: isActive ? styles.navButton.backgroundColor : "transparent"
@@ -29,13 +33,16 @@ const barItem = (item, dispatch, isActive) => {
 
 export default function BottomBar() {
     const {pageKey} = useSelector(state => state.navigationReducer);
-    const {text, styles} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
 
+    const {theme, lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
+    const styles = useMemo(() => getStyles(theme), [theme]);
+
     const elements = [
-        {key: "home", title: text.homepage, icon: "home"},
-        {key: "markets", title: text.markets, icon: "store"},
-        {key: "settings", title: text.settings, icon: "settings"}];
+        {key: "home", title: messages.homepage, icon: "home"},
+        {key: "markets", title: messages.markets, icon: "store"},
+        {key: "settings", title: messages.settings, icon: "settings"}];
 
     return (
         <HStack style={styles.bottomBar}>

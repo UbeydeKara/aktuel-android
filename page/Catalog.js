@@ -8,55 +8,33 @@ import {HStack, SweetText, VStack} from "../component";
 import {dateFormatter, formatMultipleDate} from "../utils/dateFormatter";
 
 import ImageZoom from 'react-native-image-pan-zoom';
-import {useRef} from "react";
-import {BannerAd, BannerAdSize, TestIds} from "react-native-google-mobile-ads";
+import {useCallback, useMemo, useRef} from "react";
 import Share from 'react-native-share';
 import base64File from "../utils/base64Converter";
-
-const Item = ({item, styles, width, height}) => {
-    const scaleValue = useRef(1);
-
-    return (
-        <ImageZoom cropWidth={width}
-                   cropHeight={height}
-                   imageWidth={width}
-                   imageHeight={height}
-                   style={styles.productCard}
-                   onStartShouldSetPanResponder={(e) => {
-                       return e.nativeEvent.touches.length === 2 || scaleValue.current > 1;
-                   }}
-                   onMove={({scale}) => {
-                       scaleValue.current = scale;
-                   }}>
-            <Image style={styles.imageContainer}
-                   source={{uri: item}}/>
-        </ImageZoom>
-    )
-}
+import {getMessages} from "../constant/lang";
+import {getStyles} from "../constant/style";
+import {AdBanner} from "../section/AdBanner";
 
 const {width, height} = Dimensions.get("screen");
+const catalogHeight = height - 330;
+
+const getCatalogItemLayout = (data, index) => (
+    {length: catalogHeight, offset: catalogHeight * index, index}
+)
+
+const getProductItemLayout = (data, index) => (
+    {length: 250, offset: 250 * index, index}
+)
 
 export default function Catalog() {
     const {navProps} = useSelector(state => state.navigationReducer);
-    const {styles, text, lang} = useSelector(state => state.settingsReducer);
+    const {theme, lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     const appBarTitle =
         navProps?.market?.title + ": "
         + formatMultipleDate(navProps?.startAt, navProps?.deadline, lang)
-
-    const catalogItem = ({item}) => {
-        return (
-            <Item item={item} styles={styles} height={(height - 330)} width={(width - 50)}/>
-        );
-    }
-
-    const productItem = ({item}) => {
-        return (
-            <Item item={item} styles={styles} height={250} width={300}/>
-        );
-    }
-
-
 
     const onShare = async () => {
         const base64Images = [];
@@ -67,7 +45,7 @@ export default function Catalog() {
         }
 
         const shareOptions = {
-            title: text.shareDialog,
+            title: messages.shareDialog,
             urls: base64Images,
             failOnCancel: false,
         };
@@ -79,6 +57,34 @@ export default function Catalog() {
         }
     };
 
+    const Item = useCallback(({item, width, height}) => {
+        const scaleValue = useRef(1);
+        return (
+            <ImageZoom cropWidth={width}
+                       cropHeight={height}
+                       imageWidth={width}
+                       imageHeight={height}
+                       style={styles.productCard}
+                       onStartShouldSetPanResponder={(e) => {
+                           return e.nativeEvent.touches.length === 2 || scaleValue.current > 1;
+                       }}
+                       onMove={({scale}) => {
+                           scaleValue.current = scale;
+                       }}>
+                <Image style={styles.imageContainer}
+                       source={{uri: item}}/>
+            </ImageZoom>
+        )
+    }, [navProps]);
+
+    const catalogItem = useCallback(({item}) => (
+        <Item item={item} height={(height - 330)} width={(width - 50)}/>
+    ), [navProps.images]);
+
+    const productItem = useCallback(({item}) => (
+        <Item item={item} height={250} width={300}/>
+    ), [navProps.products]);
+
     return (
         <>
             <AppBar
@@ -86,38 +92,33 @@ export default function Catalog() {
                 onShare={onShare}/>
 
             <FlatList
-                contentContainerStyle={{paddingVertical: 110, paddingHorizontal: 20}}
+                contentContainerStyle={{paddingVertical: 60}}
                 data={navProps?.images}
                 renderItem={catalogItem}
                 keyExtractor={(item, index) => index}
+                getItemLayout={getCatalogItemLayout}
                 ListFooterComponent={
                     <VStack space={15}>
                         <HStack space={5} mt={1}>
                             <MaterialCommunityIcons name="calendar-start" size={22} color={styles.sweet_text.color}/>
-                            <SweetText size={16}>{text.offerStart}: {dateFormatter(navProps?.startAt, lang)}</SweetText>
+                            <SweetText size={16}>{messages.offerStart}: {dateFormatter(navProps?.startAt, lang)}</SweetText>
                         </HStack>
                         <HStack space={5}>
                             <MaterialCommunityIcons name="calendar-end" size={22} color={styles.sweet_text.color}/>
-                            <SweetText size={16}>{text.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
+                            <SweetText size={16}>{messages.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
                         </HStack>
-                        <HStack centerX mt={1}>
-                            <BannerAd
-                                unitId={TestIds.BANNER}
-                                size={BannerAdSize.LARGE_BANNER}
-                                requestOptions={{
-                                    requestNonPersonalizedAdsOnly: true,
-                                }}
-                            />
-                        </HStack>
+                        <AdBanner/>
                         <FlatList
                             data={navProps?.products}
                             renderItem={productItem}
                             keyExtractor={(item, index) => index}
+                            getItemLayout={getProductItemLayout}
                             ListHeaderComponent={
+                            navProps?.products?.length > 0 ?
                                 <HStack space={5} my={1}>
                                     <Entypo name="dropbox" size={22} color={styles.sweet_text.color}/>
-                                    <SweetText size={24}>{text.products}</SweetText>
-                                </HStack>
+                                    <SweetText size={24}>{messages.products + " (" + navProps?.products?.length + ")"}</SweetText>
+                                </HStack> : null
                             }
                         />
                     </VStack>

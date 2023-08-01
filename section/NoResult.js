@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Image, View} from "react-native";
 
 import {Audio} from 'expo-av';
@@ -6,6 +6,7 @@ import {FontAwesome5} from "@expo/vector-icons";
 
 import {IconButton, SweetText, VStack} from "../component";
 import {useSelector} from "react-redux";
+import {getMessages} from "../constant/lang";
 
 const playStyle = {
     position: "absolute",
@@ -13,10 +14,12 @@ const playStyle = {
     right: 15
 };
 
-export default function NoResult({resultSize}) {
+export default function NoResult() {
     const [sound, setSound] = useState();
     const {pageKey} = useSelector(state => state.navigationReducer);
-    const {text} = useSelector(state => state.settingsReducer);
+
+    const {lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
 
     async function playSound() {
         const {sound} = await Audio.Sound.createAsync(require('../assets/static/meow.mp3')
@@ -42,7 +45,7 @@ export default function NoResult({resultSize}) {
                 <IconButton size={40} color="whitesmoke" name="play-outline" style={playStyle} onPress={playSound}/>
             </View>
             <SweetText size={26} style={{textAlign: "center"}}>
-                {text.noResultDialog}
+                {messages.noResultDialog}
             </SweetText>
             <FontAwesome5 name="sad-cry" size={50} color="orange"/>
         </VStack>

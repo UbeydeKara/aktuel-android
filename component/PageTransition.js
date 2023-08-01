@@ -11,6 +11,8 @@ export default function PageTransition({children, isActive}) {
         position: 'absolute',
         height: height,
         width: width,
+        paddingVertical: 40,
+        paddingHorizontal: 20,
         opacity: fade,
         zIndex: isActive ? 1 : 0,
         transform: [{scaleX: scale}, {scaleY: scale}]

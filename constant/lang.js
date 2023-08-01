@@ -9,6 +9,7 @@ export const en_US = {
     appearance: "Appearance",
     light: "Light",
     dark: "Dark",
+    contact: "Contact",
 
     // homepage
     happy: "Happy",
@@ -19,7 +20,10 @@ export const en_US = {
     offerEnd: "Offer Ends At",
     products: "Products",
     shareDialog: "Share catalogs",
-    noResultDialog: "We could not find an up-to-date catalog for the market you are looking for"
+    noResultDialog: "We could not find an up-to-date catalog for the market you are looking for",
+
+    // alert
+    noConnection: "No internet connection"
 };
 export const tr_TR = {
     // bottom_bar
@@ -32,6 +36,7 @@ export const tr_TR = {
     appearance: "Görünüm",
     light: "Açık",
     dark: "Koyu",
+    contact: "İletişim",
 
     // homepage
     happy: "Mutlu",
@@ -42,7 +47,10 @@ export const tr_TR = {
     offerEnd: "Kampanya Bitiş",
     products: "Ürünler",
     shareDialog: "Katalogları paylaş",
-    noResultDialog: "Aradığınız markete ait güncel katalog bulamadık"
+    noResultDialog: "Aradığınız markete ait güncel katalog bulamadık",
+
+    // alert
+    noConnection: "No internet connection"
 };
 
-export const selectLang = (lang) => lang === "tr_TR" ? tr_TR : en_US;
+export const getMessages = (lang) => lang === "tr_TR" ? tr_TR : en_US;

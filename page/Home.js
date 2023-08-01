@@ -6,38 +6,32 @@ import HStack from "../component/HStack";
 import {todayMessage} from "../utils/days";
 import SweetText from "../component/SweetText";
 import {useSelector} from "react-redux";
-import {BannerAd, BannerAdSize, TestIds} from "react-native-google-mobile-ads";
-import {View} from "react-native";
+import {useMemo} from "react";
+import {getMessages} from "../constant/lang";
+import {AdBanner} from "../section/AdBanner";
 
 export default function Home() {
-    const {text, styles, lang} = useSelector(state => state.settingsReducer);
+    const {lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
 
     return(
-        <VStack style={[styles.px2, styles.py4]} space={10}>
-
-            {/*Top Banner*/}
+        <VStack space={10}>
+            {/* Top Banner */}
             <HStack space={15}>
                 <MaterialCommunityIcons name="party-popper" size={40} color="orange" />
                 <VStack>
-                    <SweetText size={32} family="PublicSans_300Light">{text.happy}</SweetText>
+                    <SweetText size={32} family="PublicSans_300Light">{messages.happy}</SweetText>
                     <SweetText size={32}>{todayMessage(lang)}</SweetText>
                 </VStack>
             </HStack>
 
-            <HStack centerX mt={1}>
-                <BannerAd
-                    unitId={TestIds.BANNER}
-                    size={BannerAdSize.LARGE_BANNER}
-                    requestOptions={{
-                        requestNonPersonalizedAdsOnly: true,
-                    }}
-                />
-            </HStack>
-
-            {/*Carousel*/}
+            {/* Carousel */}
             <Carousel/>
 
-            {/*Recent*/}
+            {/* Ads */}
+            <AdBanner/>
+
+            {/* Recent */}
             <Recent/>
         </VStack>
     )

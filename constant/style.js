@@ -7,7 +7,9 @@ export const lightStyle = {
     shadowColor: "#8f8f8f",
     dividerColor: "lightgray",
     barBg: "#FFFFFFF2",
-    buttonBg: "#ffe8cd"
+    buttonBg: "#ffe8cd",
+    inverseTextColor: "#F8F6FA",
+    inverseBg: "#26282C"
 }
 
 export const darkStyle = {
@@ -17,7 +19,9 @@ export const darkStyle = {
     shadowColor: "#000",
     dividerColor: "gray",
     barBg: "#26282CF2",
-    buttonBg: "#817669"
+    buttonBg: "#817669",
+    inverseTextColor: "#000",
+    inverseBg: "#F8F6FA"
 }
 
 export const currentStyle = {
@@ -25,7 +29,7 @@ export const currentStyle = {
     dark: darkStyle
 }
 
-export const styles = (theme) =>
+export const getStyles = (theme) =>
     StyleSheet.create({
         // container
         container: {
@@ -111,7 +115,8 @@ export const styles = (theme) =>
             width: '100%',
             height: '100%',
             borderRadius: 10,
-            resizeMode: "stretch"
+            resizeMode: "stretch",
+            backgroundColor: currentStyle[theme].backgroundColor,
         },
 
         // card
@@ -137,12 +142,14 @@ export const styles = (theme) =>
             shadowColor: "#8f8f8f",
             elevation: 4
         },
-        card: {
+        recentCard: {
             width: "45%",
             height: 250,
             marginVertical: 10,
             marginHorizontal: 10,
-            borderRadius: 10
+            borderRadius: 10,
+            shadowColor: "#8f8f8f",
+            elevation: 4
         },
         card_footer: {
             height: 40,
@@ -153,17 +160,24 @@ export const styles = (theme) =>
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10
         },
-        shadowProp: {
-            shadowColor: "#8f8f8f",
-            elevation: 4
-        },
         marketCard: {
             width: "45%",
             height: 150,
             marginVertical: 10,
             marginHorizontal: 10,
             borderRadius: 40,
-            padding: 20
+            padding: 20,
+            shadowColor: "#8f8f8f",
+            elevation: 4
+        },
+
+        flatButton: {
+            padding: 12,
+            borderRadius: 25,
+            backgroundColor: currentStyle[theme].inverseBg,
+            color: currentStyle[theme].inverseTextColor,
+            shadowColor: currentStyle[theme].shadowColor,
+            elevation: 24
         },
 
         // text

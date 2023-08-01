@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {BackHandler, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -10,11 +10,14 @@ import {getMarkets} from "../redux/actions/MarketAction";
 import {getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
 import BottomBar from "./BottomBar";
 import {switchPage} from "../redux/actions/NavigationAction";
+import {getStyles} from "../constant/style";
 
 export default function Navigator() {
     const {pageKey} = useSelector(state => state.navigationReducer);
-    const {styles} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
+
+    const {theme} = useSelector(state => state.settingsReducer);
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => {

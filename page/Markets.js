@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {Dimensions, FlatList, RefreshControl, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -8,32 +8,37 @@ import {SvgCssUri} from "react-native-svg";
 import {getMarkets, selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
 import Skeleton from "../component/Skeleton";
-import {BannerAd, BannerAdSize, TestIds} from "react-native-google-mobile-ads";
+import {getMessages} from "../constant/lang";
+import {getStyles} from "../constant/style";
+import {AdBanner} from "../section/AdBanner";
 
 const {height} = Dimensions.get("screen");
 
-const Item = ({item, handleSelect, styles}) => (
-    <TouchableOpacity onPress={() => handleSelect(item)}
-                      style={[styles.marketCard, styles.shadowProp, {backgroundColor: item.tint}]}>
-        <SvgCssUri
-            width="100%"
-            height="100%"
-            uri={item?.img_path}
-        />
-    </TouchableOpacity>
-);
-
 export default function Markets() {
-    const {styles, text} = useSelector(state => state.settingsReducer);
     const {markets} = useSelector(state => state.marketReducer);
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(false);
 
-    const renderItem = ({item}) => {
+    const {theme, lang} = useSelector(state => state.settingsReducer);
+    const messages = useMemo(() => getMessages(lang), [lang]);
+    const styles = useMemo(() => getStyles(theme), [theme]);
+
+    const Item = useCallback(({item, handleSelect, styles}) => (
+        <TouchableOpacity onPress={() => handleSelect(item)}
+                          style={[styles.marketCard, {backgroundColor: item.tint}]}>
+            <SvgCssUri
+                width="100%"
+                height="100%"
+                uri={item?.img_path}
+            />
+        </TouchableOpacity>
+    ), [markets]);
+
+    const renderItem = useCallback(({item}) => {
         return item?.marketID < 0 ?
             <Skeleton styleProp={styles.marketCard}/> :
             <Item item={item} handleSelect={handleSelect} styles={styles}/>
-    }
+    }, [markets]);
 
     const handleSelect = (item) => {
         dispatch(selectMarket(item.marketID));
@@ -54,10 +59,10 @@ export default function Markets() {
     }
 
     return (
-        <VStack style={[styles.px2, styles.py4]}>
+        <VStack>
             <HStack space={15}>
-                <IconButton name="chevron-back" onPress={e => handlePageSwitch("back")}/>
-                <SweetText size={24}>{text.markets}</SweetText>
+                <IconButton name="chevron-back" onPress={() => handlePageSwitch("back")}/>
+                <SweetText size={24}>{messages.markets}</SweetText>
             </HStack>
             <FlatList
                 data={markets}
@@ -70,15 +75,7 @@ export default function Markets() {
                 <RefreshControl refreshing={refresh} onRefresh={refreshData}/>
                 }
             />
-            <HStack centerX mt={1}>
-                <BannerAd
-                    unitId={TestIds.BANNER}
-                    size={BannerAdSize.LARGE_BANNER}
-                    requestOptions={{
-                        requestNonPersonalizedAdsOnly: true,
-                    }}
-                />
-            </HStack>
+            <AdBanner/>
         </VStack>
     );
 }

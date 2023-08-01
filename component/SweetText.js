@@ -1,8 +1,11 @@
 import {Text} from "react-native";
 import {useSelector} from "react-redux";
+import {useMemo} from "react";
+import {getStyles} from "../constant/style";
 
 export default function SweetText({children, color, size, family, center, ...params}) {
-    const {styles} = useSelector(state => state.settingsReducer);
+    const {theme} = useSelector(state => state.settingsReducer);
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     const textStyle = {
         fontFamily: family || "PublicSans_500Medium",
