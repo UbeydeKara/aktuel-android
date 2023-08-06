@@ -2,8 +2,8 @@ import {useFonts} from 'expo-font';
 import {Provider} from 'react-redux';
 import {persistor, store} from "./redux/store";
 import {PublicSans_300Light, PublicSans_500Medium} from "@expo-google-fonts/public-sans";
-import {Navigator} from "./section";
 import {PersistGate} from "redux-persist/integration/react";
+import Navigator from "./page/Navigator";
 
 export default function App() {
     const [fontsLoaded] = useFonts({

@@ -5,27 +5,43 @@ import {useDispatch, useSelector} from "react-redux";
 import {MaterialIcons} from "@expo/vector-icons";
 
 import {SvgCssUri} from "react-native-svg";
-
-import {getCatalogsByMarket} from "../redux/actions/CatalogAction";
 import {switchPage} from "../redux/actions/NavigationAction";
 
 import {formatMultipleDate} from "../utils/dateFormatter";
-import NoResult from "../section/NoResult";
-import {HStack, IconButton, SweetText, VStack} from "../component";
+import {HStack, IconButton, SweetText, VStack, Skeleton} from "../component";
 import {getStyles} from "../constant/style";
+import {getCatalogs} from "../redux/actions/CatalogAction";
+import {NoResult} from "../section";
 
-export default function MarketCatalogs({...params}) {
+export default function MarketCatalogs() {
     const [refresh, setRefresh] = useState(false);
-    const {selectedMarket, markets} = useSelector(state => state.marketReducer);
-    const {catalogsByMarket} = useSelector(state => state.catalogReducer);
     const dispatch = useDispatch();
 
+    // reducers
+    const {selectedMarket, markets} = useSelector(state => state.marketReducer);
+    const {catalogs} = useSelector(state => state.catalogReducer);
     const {theme, lang} = useSelector(state => state.settingsReducer);
+
+    // styles
     const styles = useMemo(() => getStyles(theme), [theme]);
 
     const market = markets.find(x => x.marketID === selectedMarket);
+    const catalogsByMarket = catalogs?.filter(x => x.market?.marketID === selectedMarket);
 
-    const Item = useCallback(({item, handlePageSwitch, styles, lang}) => (
+    const handlePageSwitch = (key, item) => {
+        dispatch(switchPage(key, item));
+    }
+
+    const refreshData = () => {
+        setRefresh(true);
+        dispatch(getCatalogs()).then(
+            () => {
+                setRefresh(false);
+            }
+        );
+    }
+
+    const Item = useCallback(({item}) => (
         <TouchableOpacity onPress={() => handlePageSwitch("catalog", item)}
                           style={styles.recentCard}>
             <Image
@@ -38,28 +54,13 @@ export default function MarketCatalogs({...params}) {
         </TouchableOpacity>
     ), [catalogsByMarket]);
 
-    const handlePageSwitch = (key, item) => {
-        dispatch(switchPage(key, item));
-    }
-
     const renderItem = useCallback(({item}) => {
-        return (
-            <Item item={item} handlePageSwitch={handlePageSwitch} styles={styles} lang={lang}/>
-        );
+        return item.catalogID < 0 ? <Skeleton styleProp={styles.recentCard}/> : <Item item={item}/>
     }, [catalogsByMarket]);
 
-    const refreshData = () => {
-        setRefresh(true);
-        dispatch(getCatalogsByMarket(selectedMarket)).then(
-            () => {
-                setRefresh(false);
-            }
-        );
-    }
-
     return (
-        <VStack space={15}>
-            <HStack space={15}>
+        <VStack fullHeight pt={6} px={3}>
+            <HStack space={5} mb={2}>
                 <IconButton name="chevron-back" onPress={() => handlePageSwitch("back")}/>
                 <SvgCssUri
                     width="20%"
@@ -68,11 +69,11 @@ export default function MarketCatalogs({...params}) {
                 />
             </HStack>
             <FlatList
-                {...params}
                 data={catalogsByMarket}
                 renderItem={renderItem}
-                keyExtractor={(item, index) => index}
+                keyExtractor={item => item.catalogID}
                 numColumns={2}
+                contentContainerStyle={{ paddingBottom: 165}}
                 refreshControl={
                     <RefreshControl
                         refreshing={refresh}

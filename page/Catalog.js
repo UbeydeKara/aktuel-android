@@ -3,17 +3,15 @@ import {useSelector} from "react-redux";
 
 import {Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
 
-import AppBar from "../section/AppBar";
 import {HStack, SweetText, VStack} from "../component";
 import {dateFormatter, formatMultipleDate} from "../utils/dateFormatter";
 
 import ImageZoom from 'react-native-image-pan-zoom';
 import {useCallback, useMemo, useRef} from "react";
-import Share from 'react-native-share';
-import base64File from "../utils/base64Converter";
 import {getMessages} from "../constant/lang";
 import {getStyles} from "../constant/style";
-import {AdBanner} from "../section/AdBanner";
+import {imageRatio} from "../utils/pixelRatio";
+import {AdBanner, AppBar} from "../section";
 
 const {width, height} = Dimensions.get("screen");
 const catalogHeight = height - 330;
@@ -36,27 +34,6 @@ export default function Catalog() {
         navProps?.market?.title + ": "
         + formatMultipleDate(navProps?.startAt, navProps?.deadline, lang)
 
-    const onShare = async () => {
-        const base64Images = [];
-
-        for (const url of navProps?.images) {
-            const base64Image = await base64File(url);
-            base64Images.push(base64Image);
-        }
-
-        const shareOptions = {
-            title: messages.shareDialog,
-            urls: base64Images,
-            failOnCancel: false,
-        };
-
-        try {
-            await Share.open(shareOptions);
-        } catch (error) {
-            console.log('Error on sharing => ', error);
-        }
-    };
-
     const Item = useCallback(({item, width, height}) => {
         const scaleValue = useRef(1);
         return (
@@ -78,36 +55,36 @@ export default function Catalog() {
     }, [navProps]);
 
     const catalogItem = useCallback(({item}) => (
-        <Item item={item} height={(height - 330)} width={(width - 50)}/>
+        <Item item={item} height={(height - (330 * imageRatio))} width={(width - 50)}/>
     ), [navProps.images]);
 
     const productItem = useCallback(({item}) => (
-        <Item item={item} height={250} width={300}/>
+        <Item item={item} height={(width - 150)} width={(width - 100)}/>
     ), [navProps.products]);
 
     return (
         <>
-            <AppBar
-                title={appBarTitle}
-                onShare={onShare}/>
+            <AppBar title={appBarTitle} images={navProps?.images}/>
 
             <FlatList
-                contentContainerStyle={{paddingVertical: 60}}
+                contentContainerStyle={{paddingVertical: 100}}
                 data={navProps?.images}
                 renderItem={catalogItem}
                 keyExtractor={(item, index) => index}
                 getItemLayout={getCatalogItemLayout}
                 ListFooterComponent={
-                    <VStack space={15}>
-                        <HStack space={5} mt={1}>
+                    <VStack px={4}>
+                        <HStack space={5} mt={3}>
                             <MaterialCommunityIcons name="calendar-start" size={22} color={styles.sweet_text.color}/>
                             <SweetText size={16}>{messages.offerStart}: {dateFormatter(navProps?.startAt, lang)}</SweetText>
                         </HStack>
-                        <HStack space={5}>
+                        <HStack space={5} mt={3} mb={1}>
                             <MaterialCommunityIcons name="calendar-end" size={22} color={styles.sweet_text.color}/>
                             <SweetText size={16}>{messages.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
                         </HStack>
-                        <AdBanner/>
+
+                        <AdBanner unitId="ca-app-pub-8805921975199454/2272482800"/>
+
                         <FlatList
                             data={navProps?.products}
                             renderItem={productItem}
@@ -115,7 +92,7 @@ export default function Catalog() {
                             getItemLayout={getProductItemLayout}
                             ListHeaderComponent={
                             navProps?.products?.length > 0 ?
-                                <HStack space={5} my={1}>
+                                <HStack space={5} mt={4} mb={2}>
                                     <Entypo name="dropbox" size={22} color={styles.sweet_text.color}/>
                                     <SweetText size={24}>{messages.products + " (" + navProps?.products?.length + ")"}</SweetText>
                                 </HStack> : null

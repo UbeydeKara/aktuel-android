@@ -38,16 +38,16 @@ export default function NoResult() {
     }, [pageKey]);
 
     return (
-        <VStack space={15} centerX>
-            <View style={{overflow: "hidden", borderRadius: 50}}>
-                <Image style={{height: 400, width: 300}} onTouchStart={playSound}
+        <VStack centerX mt={2}>
+            <View style={{overflow: "hidden", borderRadius: 50, aspectRatio: 0.9, width: "85%"}}>
+                <Image style={{height: "100%", width: "100%"}} onTouchStart={playSound}
                        source={require("../assets/static/cat-sad.gif")}/>
                 <IconButton size={40} color="whitesmoke" name="play-outline" style={playStyle} onPress={playSound}/>
             </View>
-            <SweetText size={26} style={{textAlign: "center"}}>
+            <SweetText size={24} style={{textAlign: "center"}} my={3}>
                 {messages.noResultDialog}
             </SweetText>
-            <FontAwesome5 name="sad-cry" size={50} color="orange"/>
+            <FontAwesome5 name="sad-cry" size={48} color="orange"/>
         </VStack>
 
     );

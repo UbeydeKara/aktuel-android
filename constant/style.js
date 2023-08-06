@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import {adsRatio, pixelRatio} from "../utils/pixelRatio";
 
 export const lightStyle = {
     containerBg: "#F8F6FA",
@@ -33,7 +34,7 @@ export const getStyles = (theme) =>
     StyleSheet.create({
         // container
         container: {
-            flex: 1,
+            height: "100%",
             backgroundColor: currentStyle[theme].containerBg
         },
 
@@ -46,6 +47,14 @@ export const getStyles = (theme) =>
         icon_button: {
             padding: 10,
             borderRadius: 20
+        },
+        flatButton: {
+            padding: 12 * pixelRatio,
+            borderRadius: 25 * pixelRatio,
+            backgroundColor: currentStyle[theme].inverseBg,
+            color: currentStyle[theme].inverseTextColor,
+            shadowColor: currentStyle[theme].shadowColor,
+            elevation: 24
         },
 
         // menus
@@ -65,9 +74,10 @@ export const getStyles = (theme) =>
         // carousel
         carouselItem: {
             width: 80,
-            height: 80,
+            aspectRatio: 1,
             margin: 5,
-            padding: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 20,
             borderRadius: 30,
             shadowColor: "#8f8f8f",
             elevation: 4
@@ -94,7 +104,7 @@ export const getStyles = (theme) =>
             position: "absolute",
             justifyContent: "space-evenly",
             backgroundColor: currentStyle[theme].barBg,
-            paddingVertical: 10,
+            paddingVertical: 10 * pixelRatio,
             paddingHorizontal: 10,
             zIndex: 999,
             left: 0,
@@ -104,7 +114,7 @@ export const getStyles = (theme) =>
             elevation: 24
         },
         navButton: {
-            padding: 12,
+            padding: 12 * pixelRatio,
             borderRadius: 25,
             width: "30%",
             backgroundColor: currentStyle[theme].buttonBg
@@ -124,8 +134,8 @@ export const getStyles = (theme) =>
             position: "absolute",
             justifyContent: "space-between",
             backgroundColor: currentStyle[theme].barBg,
-            paddingTop: 30,
-            paddingBottom: 15,
+            paddingTop: 30 * pixelRatio,
+            paddingBottom: 15 * pixelRatio,
             paddingHorizontal: 10,
             zIndex: 999,
             left: 0,
@@ -136,15 +146,15 @@ export const getStyles = (theme) =>
         productCard: {
             height: 250,
             width: 300,
-            margin: 5,
+            margin: 8,
             alignSelf: "center",
             borderRadius: 10,
             shadowColor: "#8f8f8f",
             elevation: 4
         },
         recentCard: {
-            width: "45%",
-            height: 250,
+            width: "43%",
+            aspectRatio: 0.6,
             marginVertical: 10,
             marginHorizontal: 10,
             borderRadius: 10,
@@ -162,37 +172,29 @@ export const getStyles = (theme) =>
         },
         marketCard: {
             width: "45%",
-            height: 150,
-            marginVertical: 10,
-            marginHorizontal: 10,
+            aspectRatio: 1,
+            margin: 8,
             borderRadius: 40,
             padding: 20,
             shadowColor: "#8f8f8f",
             elevation: 4
         },
 
-        flatButton: {
-            padding: 12,
-            borderRadius: 25,
-            backgroundColor: currentStyle[theme].inverseBg,
-            color: currentStyle[theme].inverseTextColor,
-            shadowColor: currentStyle[theme].shadowColor,
-            elevation: 24
+        // menus
+        adsMenu: {
+            justifyContent: "center",
+            flexDirection: "row",
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            backgroundColor: currentStyle[theme].containerBg,
+            paddingTop: 5
         },
 
-        // text
-        subtitle: {
-            fontSize: 24,
-            fontFamily: 'PublicSans_500Medium'
-        },
-        subtitle2: {
-            fontSize: 18,
-            fontFamily: 'PublicSans_500Medium'
-        },
-        button_text: {
-            color: "#fff",
-            fontFamily: 'PublicSans_500Medium',
-            fontSize: 18
+        menuBg: {
+          backgroundColor: currentStyle[theme].backgroundColor,
+            shadowColor: currentStyle[theme].shadowColor,
+            elevation: 4
         },
 
         // spacing

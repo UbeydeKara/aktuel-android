@@ -1,6 +1,6 @@
 import {SWITCH_PAGE} from "../types";
 
-const initialState = {pageKey: 'home', navProps: {}, history: []};
+const initialState = {pageKey: 'home', navProps: {}, history: ["home"]};
 
 export default function (state = initialState, action) {
     const { type, payload } = action;

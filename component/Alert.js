@@ -24,32 +24,35 @@ export default function Alert() {
         zIndex: open ? 1 : -1
     };
 
-    const handleClose = () => {
+    const handleClose = (delay) => {
         Animated.spring(scaleValue, {
             toValue: 0,
-            delay: 3000,
+            delay: delay,
             duration: 500,
             useNativeDriver: true,
-        }).start(() => setOpen(false));
+        }).start(() => setOpen(false))
     }
 
-    useEffect(() => {
-        if (!message) return;
-
+    const handleOpen = () => {
         setOpen(true);
         Animated.spring(scaleValue, {
             toValue: 1,
             duration: 500,
             useNativeDriver: true,
-        }).start(() => handleClose());
+        }).start(() => handleClose(3000));
+    }
+
+    useEffect(() => {
+        if (message)
+            handleOpen();
     }, [id]);
 
-    return(
+    return (
         <Animated.View style={[styles.alertStyle, scaleStyle]}>
             <HStack space={10} centerX>
-                <FontAwesome name="warning" size={24} color="#FFC61A" />
+                <FontAwesome name="warning" size={24} color="#FFC61A"/>
                 <SweetText size={17} color="rgb(122, 79, 1);">{messages.noConnection}</SweetText>
-                <IconButton name="close" color="rgb(122, 79, 1)" onPress={handleClose}/>
+                <IconButton name="close" color="rgb(122, 79, 1)" onPress={() => handleClose(0)}/>
             </HStack>
         </Animated.View>
     );

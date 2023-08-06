@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useState} from "react";
-import {FlatList, Image, RefreshControl, TouchableOpacity} from "react-native";
+import {FlatList, Image, RefreshControl, TouchableOpacity, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 
 import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
@@ -8,13 +8,13 @@ import {getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
 import {switchPage} from "../redux/actions/NavigationAction";
 
 import {formatMultipleDate} from "../utils/dateFormatter";
-import {HStack, SweetText, VStack} from "../component";
+import {HStack, SweetText} from "../component";
 import Skeleton from "../component/Skeleton";
 import {getMessages} from "../constant/lang";
 import {getStyles} from "../constant/style";
 
 const getItemLayout = (data, index) => (
-    {length: 250, offset: 250 * index, index}
+    {length: 300, offset: 300 * index, index}
 )
 
 export default function Recent() {
@@ -55,15 +55,13 @@ export default function Recent() {
     }, [recentlyAdded]);
 
     return (
-        <VStack space={10}>
-            <HStack space={15}>
+        <View style={{flex: 1, flexGrow: 1}}>
+            <HStack space={15} my={3}>
                 <FontAwesome5 name="calendar-week" size={20} color={styles.sweet_text.color}/>
                 <SweetText size={24}>{messages.recentlyAdded}</SweetText>
             </HStack>
             <FlatList
-                contentContainerStyle={{
-                    minHeight: 250 * recentlyAdded.length
-                }}
+                contentContainerStyle={{paddingBottom: 80}}
                 data={recentlyAdded}
                 renderItem={renderItem}
                 keyExtractor={item => item.catalogID}
@@ -76,6 +74,6 @@ export default function Recent() {
                     />
                 }
             />
-        </VStack>
+        </View>
     );
 }

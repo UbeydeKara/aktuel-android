@@ -1,17 +1,13 @@
 import {FlatList, TouchableOpacity} from "react-native";
-import VStack from "../component/VStack";
-import HStack from "../component/HStack";
 import {FontAwesome} from "@expo/vector-icons";
-import IconButton from "../component/IconButton";
 import {SvgCssUri} from "react-native-svg";
 import {useDispatch, useSelector} from "react-redux";
 import {selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
-import Skeleton from "../component/Skeleton";
-import {SweetText} from "../component";
 import {useCallback, useMemo} from "react";
 import {getMessages} from "../constant/lang";
 import {getStyles} from "../constant/style";
+import {HStack, IconButton, Skeleton, SweetText, VStack} from "../component";
 
 export default function Carousel() {
     const {markets} = useSelector(state => state.marketReducer);

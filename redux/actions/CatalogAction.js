@@ -1,12 +1,12 @@
-import {GET_CATALOGS_BY_MARKET, GET_CATALOGS_RECENTLY_ADDED} from "../types";
+import {GET_CATALOGS, GET_CATALOGS_RECENTLY_ADDED} from "../types";
 import CatalogService from "../../service/catalog-service";
 import {show_alert} from "./AlertAction";
 
-export const getCatalogsByMarket = (selectedMarket) => async (dispatch) => {
+export const getCatalogs = () => async (dispatch) => {
     try {
-        const res = await CatalogService.getCatalogsByMarket(selectedMarket);
+        const res = await CatalogService.getCatalogs();
         dispatch({
-            type: GET_CATALOGS_BY_MARKET,
+            type: GET_CATALOGS,
             payload: res.data.data,
         });
         return Promise.resolve(res.data.data);

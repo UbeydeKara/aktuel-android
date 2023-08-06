@@ -4,16 +4,17 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {StatusBar} from "expo-status-bar";
 import {Alert, PageTransition} from "../component";
-import {Catalog, Home, MarketCatalogs, Markets, Settings} from "../page";
 
 import {getMarkets} from "../redux/actions/MarketAction";
-import {getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
-import BottomBar from "./BottomBar";
+import {getCatalogs, getCatalogsRecentlyAdded} from "../redux/actions/CatalogAction";
+import BottomBar from "../section/BottomBar";
 import {switchPage} from "../redux/actions/NavigationAction";
 import {getStyles} from "../constant/style";
+import AdBanner from "../section/AdBanner";
+import {pages} from "./index";
 
 export default function Navigator() {
-    const {pageKey} = useSelector(state => state.navigationReducer);
+    const {pageKey, history} = useSelector(state => state.navigationReducer);
     const dispatch = useDispatch();
 
     const {theme} = useSelector(state => state.settingsReducer);
@@ -21,32 +22,29 @@ export default function Navigator() {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => {
+
+            if (history === "home")
+                BackHandler.exitApp();
+
             dispatch(switchPage("back"));
             return true;
         });
+
+        dispatch(getCatalogs())
         dispatch(getMarkets());
         dispatch(getCatalogsRecentlyAdded());
+
     }, []);
 
     return (
         <View style={styles.container}>
-            <PageTransition isActive={pageKey === "home"}>
-                <Home/>
-            </PageTransition>
-            <PageTransition isActive={pageKey === "catalog"}>
-                <Catalog/>
-            </PageTransition>
-            <PageTransition isActive={pageKey === "market_catalogs"}>
-                <MarketCatalogs/>
-            </PageTransition>
-            <PageTransition isActive={pageKey === "markets"}>
-                <Markets/>
-            </PageTransition>
-            <PageTransition isActive={pageKey === "settings"}>
-                <Settings/>
-            </PageTransition>
+            {pages.map(item => (
+                <PageTransition key={item.key} isActive={pageKey === item.key}>
+                    {item.component}
+                </PageTransition>
+            ))}
+            {pageKey !== "home" && pageKey !== "catalog" && <AdBanner overlay unitId="ca-app-pub-8805921975199454/2539698812"/>}
             <Alert/>
-            {/*StatusBar*/}
             <BottomBar/>
             <StatusBar style="auto"/>
         </View>

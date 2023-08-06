@@ -50,7 +50,7 @@ export const tr_TR = {
     noResultDialog: "Aradığınız markete ait güncel katalog bulamadık",
 
     // alert
-    noConnection: "No internet connection"
+    noConnection: "Sunucu bağlantı hatası"
 };
 
 export const getMessages = (lang) => lang === "tr_TR" ? tr_TR : en_US;

@@ -4,4 +4,25 @@ import MarketCatalogs from "./MarketCatalogs";
 import Markets from "./Markets";
 import Settings from "./Settings";
 
-export {Catalog, Home, Markets, Settings, MarketCatalogs}
+export const pages = [
+    {
+        key: "home",
+        component: <Home/>
+    },
+    {
+        key: "catalog",
+        component: <Catalog/>
+    },
+    {
+        key: "market_catalogs",
+        component: <MarketCatalogs/>
+    },
+    {
+        key: "markets",
+        component: <Markets/>
+    },
+    {
+        key: "settings",
+        component: <Settings/>
+    },
+];
