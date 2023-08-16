@@ -1,12 +1,12 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {Image, View} from "react-native";
 
-import {Audio} from 'expo-av';
 import {FontAwesome5} from "@expo/vector-icons";
 
 import {IconButton, SweetText, VStack} from "../component";
 import {useSelector} from "react-redux";
 import {getMessages} from "../constant/lang";
+import {soundPlayer} from "../utils/AudioTool";
 
 const playStyle = {
     position: "absolute",
@@ -15,27 +15,14 @@ const playStyle = {
 };
 
 export default function NoResult() {
-    const [sound, setSound] = useState();
-    const {pageKey} = useSelector(state => state.navigationReducer);
-
     const {lang} = useSelector(state => state.settingsReducer);
     const messages = useMemo(() => getMessages(lang), [lang]);
 
     async function playSound() {
-        const {sound} = await Audio.Sound.createAsync(require('../assets/static/meow.mp3')
-        );
-        setSound(sound);
-        await sound.playAsync();
+        if(!soundPlayer._loaded)
+            await soundPlayer.loadAsync(require('../assets/static/meow.mp3'));
+        await soundPlayer.playAsync();
     }
-
-    async function stopSound() {
-        if (sound)
-            await sound.unloadAsync();
-    }
-
-    useEffect(() => {
-        stopSound();
-    }, [pageKey]);
 
     return (
         <VStack centerX mt={2}>
