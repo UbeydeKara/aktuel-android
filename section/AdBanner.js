@@ -4,8 +4,9 @@ import {Animated} from "react-native";
 import {adsRatio, pixelRatio} from "../utils/pixelRatio";
 import {useSelector} from "react-redux";
 import {getStyles} from "../constant/style";
+import {UNIT_TEST_ID} from "../utils/AdUnitIds";
 
-export default function AdBanner({unitId = "ca-app-pub-3940256099942544/6300978111", overlay}) {
+export default function AdBanner({unitId = UNIT_TEST_ID, overlay}) {
     const [loaded, setLoad] = useState(false);
     const [height] = useState(new Animated.Value(0));
     const [fade] = useState(new Animated.Value(0));
@@ -43,10 +44,9 @@ export default function AdBanner({unitId = "ca-app-pub-3940256099942544/63009781
         return(
             <Animated.View style={style}>
                 <BannerAd
-                    unitId={unitId}
+                    unitId={UNIT_TEST_ID}
                     size={BannerAdSize.LARGE_BANNER}
-                    requestOptions={{requestNonPersonalizedAdsOnly: true}}
-                    onAdLoaded={() => setLoad(true)}/>
+                    requestOptions={{requestNonPersonalizedAdsOnly: true}}/>
             </Animated.View>
     )
 };
