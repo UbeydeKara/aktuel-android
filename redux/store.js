@@ -1,12 +1,5 @@
-import {persistReducer, persistStore} from "redux-persist";
 import {configureStore} from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {alertReducer, catalogReducer, marketReducer, navigationReducer, settingsReducer} from "./reducers";
-
-const persistConfig = {
-    key: 'root',
-    storage: AsyncStorage
-};
 
 export const store = configureStore({
     reducer: {
@@ -14,7 +7,7 @@ export const store = configureStore({
         catalogReducer: catalogReducer,
         navigationReducer: navigationReducer,
         alertReducer: alertReducer,
-        settingsReducer: persistReducer(persistConfig, settingsReducer)
+        settingsReducer: settingsReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -22,5 +15,3 @@ export const store = configureStore({
             serializableCheck: false
         }),
 });
-
-export const persistor = persistStore(store);
