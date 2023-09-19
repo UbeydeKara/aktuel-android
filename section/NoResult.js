@@ -1,11 +1,6 @@
-import {useMemo} from 'react';
 import {Image, View} from "react-native";
 
-import {FontAwesome5} from "@expo/vector-icons";
-
-import {IconButton, SweetText, VStack} from "../component";
-import {useSelector} from "react-redux";
-import {getMessages} from "../constant/lang";
+import {Icon, IconButton, SweetText, VStack} from "../component";
 import {soundPlayer} from "../utils/AudioTool";
 
 const playStyle = {
@@ -14,10 +9,7 @@ const playStyle = {
     right: 15
 };
 
-export default function NoResult() {
-    const {lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-
+export default function NoResult({message}) {
     async function playSound() {
         if(!soundPlayer._loaded)
             await soundPlayer.loadAsync(require('../assets/static/meow.mp3'));
@@ -29,12 +21,12 @@ export default function NoResult() {
             <View style={{overflow: "hidden", borderRadius: 50, aspectRatio: 0.9, width: "85%"}}>
                 <Image style={{height: "100%", width: "100%"}} onTouchStart={playSound}
                        source={require("../assets/static/cat-sad.gif")}/>
-                <IconButton size={40} color="whitesmoke" name="play-outline" style={playStyle} onPress={playSound}/>
+                <IconButton size={40} color="light" name="play-outline" style={playStyle} onPress={playSound}/>
             </View>
             <SweetText size={24} style={{textAlign: "center"}} my={3}>
-                {messages.noResultDialog}
+                {message}
             </SweetText>
-            <FontAwesome5 name="sad-cry" size={48} color="orange"/>
+            <Icon variant="FontAwesome5" name="sad-cry" size={48} color="orange"/>
         </VStack>
 
     );

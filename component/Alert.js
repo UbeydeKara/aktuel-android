@@ -1,22 +1,17 @@
 import {Animated} from "react-native";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import HStack from "./HStack";
-import {FontAwesome} from "@expo/vector-icons";
 import IconButton from "./IconButton";
 import {useSelector} from "react-redux";
 import SweetText from "./SweetText";
-import {getMessages} from "../constant/lang";
-import {getStyles} from "../constant/style";
+import Icon from "./Icon";
 
-// TODO: messages should be translated
 export default function Alert() {
     const [open, setOpen] = useState(false);
-    const [scaleValue] = useState(new Animated.Value(0));
+    const scaleValue = useRef(new Animated.Value(0)).current;
     const {id, message} = useSelector(state => state.alertReducer);
 
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const {styles, messages} = useSelector(state => state.settingsReducer);
 
     const scaleStyle = {
         transform: [{scaleX: scaleValue}, {scaleY: scaleValue}],
@@ -50,9 +45,9 @@ export default function Alert() {
     return (
         <Animated.View style={[styles.alertStyle, scaleStyle]}>
             <HStack space={10} centerX>
-                <FontAwesome name="warning" size={24} color="#FFC61A"/>
-                <SweetText size={17} color="rgb(122, 79, 1);">{messages.noConnection}</SweetText>
-                <IconButton name="close" color="rgb(122, 79, 1)" onPress={() => handleClose(0)}/>
+                <Icon variant="FontAwesome" name="warning" size={24} color="warning"/>
+                <SweetText size={17} color="alert">{messages.noConnection}</SweetText>
+                <IconButton name="close" color="alert" onPress={() => handleClose(0)}/>
             </HStack>
         </Animated.View>
     );

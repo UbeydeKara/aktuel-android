@@ -14,7 +14,7 @@ export default function (state = initialState, action) {
                 history.pop();
                 pageKey = history.slice(-1)[0] || "home";
             }
-            else
+            else if(!history.includes(pageKey))
                 history.push(pageKey);
 
             return {pageKey, navProps, history};

@@ -3,9 +3,6 @@ import {Linking, TouchableOpacity, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {set_lang, set_theme} from "../redux/actions/SettingsAction";
 import {Ionicons} from "@expo/vector-icons";
-import {useMemo} from "react";
-import {getMessages} from "../constant/lang";
-import {getStyles} from "../constant/style";
 import {pixelRatio} from "../utils/pixelRatio";
 
 const radioButton = (title, isActive, color, onPress) => (
@@ -19,9 +16,7 @@ const radioButton = (title, isActive, color, onPress) => (
 );
 
 function LanguageMenu() {
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const {lang, messages, styles} = useSelector(state => state.settingsReducer);
     const dispatch = useDispatch();
 
     return (
@@ -45,9 +40,7 @@ function LanguageMenu() {
 function ThemeMenu() {
     const dispatch = useDispatch();
 
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const styles = useMemo(() => getStyles(theme), [theme]);
-    const messages = useMemo(() => getMessages(lang), [lang]);
+    const {theme, styles, messages} = useSelector(state => state.settingsReducer);
 
     return (
         <View>
@@ -68,9 +61,7 @@ function ThemeMenu() {
 }
 
 export default function Settings() {
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const {messages, styles} = useSelector(state => state.settingsReducer);
 
     return (
         <View>
@@ -81,7 +72,7 @@ export default function Settings() {
                 <LanguageMenu/>
                 <ThemeMenu/>
                 <IconButton name="send" size={20} text={messages.contact} buttonStyle={styles.flatButton}
-                            color={styles.flatButton.color}
+                            color="secondary"
                             onPress={() => Linking.openURL(`mailto:hatitech.app@gmail.com`)}>
                 </IconButton>
             </VStack>

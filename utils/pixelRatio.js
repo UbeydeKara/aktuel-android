@@ -1,6 +1,6 @@
 import {Dimensions} from "react-native";
 
-const {width} = Dimensions.get("window");
+export const {width} = Dimensions.get("window");
 
 export const pixelRatio = width <= 370 ? 0.8 : 1;
 

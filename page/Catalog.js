@@ -1,38 +1,46 @@
-import {Dimensions, FlatList, Image} from "react-native";
+import {Dimensions, FlatList, Image, View} from "react-native";
 import {useSelector} from "react-redux";
 
-import {Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
-
-import {HStack, SweetText, VStack} from "../component";
-import {dateFormatter, formatMultipleDate} from "../utils/dateFormatter";
+import {HStack, Icon, SweetText, VStack} from "../component";
+import {dateFormatter} from "../utils/dateFormatter";
 
 import ImageZoom from 'react-native-image-pan-zoom';
 import {useCallback, useMemo, useRef} from "react";
-import {getMessages} from "../constant/lang";
-import {getStyles} from "../constant/style";
-import {imageRatio} from "../utils/pixelRatio";
+import {pixelRatio} from "../utils/pixelRatio";
 import {AdBanner, AppBar} from "../section";
+import Card from "../component/Card";
 
 const {width, height} = Dimensions.get("screen");
-const catalogHeight = height - 330;
-
-const getCatalogItemLayout = (data, index) => (
-    {length: catalogHeight, offset: catalogHeight * index, index}
-)
-
-const getProductItemLayout = (data, index) => (
-    {length: 250, offset: 250 * index, index}
-)
 
 export default function Catalog() {
     const {navProps} = useSelector(state => state.navigationReducer);
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const {messages, styles, lang, colors} = useSelector(state => state.settingsReducer);
 
-    const appBarTitle =
-        navProps?.market?.title + ": "
-        + formatMultipleDate(navProps?.startAt, navProps?.deadline, lang)
+    const imagesWithAds = useMemo(() => {
+        let array = [...navProps?.images];
+        let putIndex = 0;
+
+        for (let i = 1; i < navProps?.images.length; i = i + 4) {
+            array.splice(putIndex + i, 0, {type: "ad"});
+            array.splice(putIndex + i + 1, 0, {type: "empty"});
+            putIndex += 2;
+        }
+
+        return array;
+    }, [navProps?.images]);
+
+    const productsWithAds = useMemo(() => {
+        let array = [...navProps?.products];
+        let putIndex = 0;
+
+        for (let i = 4; i < navProps?.products.length; i = i + 4) {
+            array.splice(putIndex + i, 0, {type: "ad"});
+            array.splice(putIndex + i + 1, 0, {type: "empty"});
+            putIndex += 2;
+        }
+
+        return array;
+    }, [navProps?.products]);
 
     const Item = useCallback(({item, width, height}) => {
         const scaleValue = useRef(1);
@@ -54,46 +62,58 @@ export default function Catalog() {
         )
     }, [navProps]);
 
-    const catalogItem = useCallback(({item}) => (
-        <Item item={item} height={(height - (330 * imageRatio))} width={(width - 50)}/>
-    ), [navProps.images]);
+    const catalogItem = useCallback(({item}) => {
+        if (item.type === "empty")
+            return <View/>
+        else if (item.type === "ad")
+            return <AdBanner my={1} isBig/>
+        return <Item item={item} height={(height - (330 * pixelRatio))} width={(width - 50)}/>
+    }, [navProps.images]);
 
-    const productItem = useCallback(({item}) => (
-        <Item item={item} height={(width - 150)} width={(width - 100)}/>
-    ), [navProps.products]);
+    const productItem = useCallback(({item}) => {
+        if (item.type === "empty")
+            return <View/>
+        else if (item.type === "ad")
+            return <AdBanner my={1} isBig/>
+        return <Item item={item} height={(width - 150)} width={(width - 100)}/>
+    }, [navProps.products]);
 
     return (
         <>
-            <AppBar title={appBarTitle} images={navProps?.images}/>
+            <AppBar/>
 
             <FlatList
-                contentContainerStyle={{paddingVertical: 100}}
-                data={navProps?.images}
+                contentContainerStyle={{paddingVertical: 100 * pixelRatio, justifyContent: "center"}}
+                data={imagesWithAds}
                 renderItem={catalogItem}
                 keyExtractor={(item, index) => index}
-                getItemLayout={getCatalogItemLayout}
                 ListFooterComponent={
                     <VStack px={4}>
-                        <HStack space={5} mt={3}>
-                            <MaterialCommunityIcons name="calendar-start" size={22} color={styles.sweet_text.color}/>
+
+                        <HStack space={10} mt={3}>
+                            <Card radius={15} bgColor={colors.secondary} padding={8}>
+                                <Icon variant="MaterialCommunityIcons" name="calendar-start" size={22}/>
+                            </Card>
                             <SweetText size={16}>{messages.offerStart}: {dateFormatter(navProps?.startAt, lang)}</SweetText>
                         </HStack>
-                        <HStack space={5} mt={3} mb={1}>
-                            <MaterialCommunityIcons name="calendar-end" size={22} color={styles.sweet_text.color}/>
+
+                        <HStack space={10} mt={2} mb={1}>
+                            <Card radius={15} bgColor={colors.secondary} padding={8}>
+                                <Icon variant="MaterialCommunityIcons" name="calendar-end" size={22}/>
+                            </Card>
                             <SweetText size={16}>{messages.offerEnd}: {dateFormatter(navProps?.deadline, lang)}</SweetText>
                         </HStack>
 
-                        <AdBanner unitId="ca-app-pub-8805921975199454/2272482800"/>
-
                         <FlatList
-                            data={navProps?.products}
+                            data={productsWithAds}
                             renderItem={productItem}
                             keyExtractor={(item, index) => index}
-                            getItemLayout={getProductItemLayout}
                             ListHeaderComponent={
                             navProps?.products?.length > 0 ?
-                                <HStack space={5} mt={4} mb={2}>
-                                    <Entypo name="dropbox" size={22} color={styles.sweet_text.color}/>
+                                <HStack space={10} mt={5} mb={2}>
+                                    <Card radius={15} bgColor={colors.secondary}>
+                                        <Icon variant="Entypo" name="dropbox" size={22}/>
+                                    </Card>
                                     <SweetText size={24}>{messages.products + " (" + navProps?.products?.length + ")"}</SweetText>
                                 </HStack> : null
                             }

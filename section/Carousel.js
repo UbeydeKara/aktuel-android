@@ -1,21 +1,17 @@
 import {FlatList, TouchableOpacity} from "react-native";
-import {FontAwesome} from "@expo/vector-icons";
 import {SvgCssUri} from "react-native-svg";
 import {useDispatch, useSelector} from "react-redux";
 import {selectMarket} from "../redux/actions/MarketAction";
 import {switchPage} from "../redux/actions/NavigationAction";
-import {useCallback, useMemo} from "react";
-import {getMessages} from "../constant/lang";
-import {getStyles} from "../constant/style";
-import {HStack, IconButton, Skeleton, SweetText, VStack} from "../component";
+import {useCallback} from "react";
+import {HStack, Icon, IconButton, Skeleton, SweetText, VStack} from "../component";
+import Card from "../component/Card";
 
 export default function Carousel() {
     const {markets} = useSelector(state => state.marketReducer);
     const dispatch = useDispatch();
 
-    const {theme, lang} = useSelector(state => state.settingsReducer);
-    const messages = useMemo(() => getMessages(lang), [lang]);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const {messages, styles, colors} = useSelector(state => state.settingsReducer);
 
     const handleSelect = (item) => {
         dispatch(selectMarket(item.marketID));
@@ -45,8 +41,10 @@ export default function Carousel() {
     return (
         <VStack>
             <HStack space="auto">
-                <HStack space={15}>
-                    <FontAwesome name="shopping-cart" size={22} color={styles.sweet_text.color}/>
+                <HStack space={10}>
+                    <Card radius={15} bgColor={colors.secondary}>
+                        <Icon variant="FontAwesome" name="shopping-cart" size={22}/>
+                    </Card>
                     <SweetText size={24}>{messages.markets}</SweetText>
                 </HStack>
                 <IconButton name="arrow-forward" size={28} onPress={() => handlePageSwitch("markets")}/>

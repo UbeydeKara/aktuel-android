@@ -7,7 +7,7 @@ export default function HStack({children, centerX, space, mt, my, mb, pt, pb, px
         flexDirection: 'row',
         alignItems: "center",
         columnGap: isNaN(+space) ? 0 : space,
-        justifyContent: centerX ? 'center' : space === 'auto' ? 'space-between' :'flex-start',
+        justifyContent: centerX ? 'center' : space === 'auto' ? 'space-between' : 'flex-start',
         marginTop: mt && mt * pixelRatio * 5,
         marginVertical: my && my * pixelRatio * 5,
         marginBottom: mb && mb * pixelRatio * 5,

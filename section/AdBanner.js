@@ -1,52 +1,21 @@
 import {BannerAd, BannerAdSize} from "react-native-google-mobile-ads";
-import {useEffect, useMemo, useState} from "react";
-import {Animated} from "react-native";
-import {adsRatio, pixelRatio} from "../utils/pixelRatio";
-import {useSelector} from "react-redux";
-import {getStyles} from "../constant/style";
-import {UNIT_TEST_ID} from "../utils/AdUnitIds";
+import {UNIT_DEFAULT_ID} from "../constant/AdUnitIds";
+import {useState} from "react";
+import {HStack, Skeleton} from "../component";
 
-export default function AdBanner({unitId = UNIT_TEST_ID, overlay}) {
-    const [loaded, setLoad] = useState(false);
-    const [height] = useState(new Animated.Value(0));
-    const [fade] = useState(new Animated.Value(0));
+export default function AdBanner({unitId = UNIT_DEFAULT_ID, isBig, my}) {
+    const [loaded, setLoaded] = useState(false);
 
-    const {theme} = useSelector(state => state.settingsReducer);
-    const styles = useMemo(() => getStyles(theme), [theme]);
+    const adSize = isBig ? BannerAdSize.MEDIUM_RECTANGLE : BannerAdSize.LARGE_BANNER;
 
-    const style = {
-        ...styles.adsMenu,
-        height: height,
-        opacity: fade,
-        position: overlay && "absolute",
-        bottom: overlay && 60 * adsRatio,
-        marginTop: !overlay && loaded && 15 * pixelRatio
-    };
-
-    useEffect(() => {
-        if (!loaded)
-            return;
-
-        Animated.parallel([
-            Animated.spring(fade, {
-                toValue: 1,
-                duration: 250,
-                useNativeDriver: false
-            }),
-            Animated.spring(height, {
-                toValue: 105,
-                duration: 250,
-                useNativeDriver: false
-            })
-        ]).start();
-    }, [loaded]);
-
-        return(
-            <Animated.View style={style}>
+    return (
+        <HStack centerX my={my}>
                 <BannerAd
-                    unitId={UNIT_TEST_ID}
-                    size={BannerAdSize.LARGE_BANNER}
-                    requestOptions={{requestNonPersonalizedAdsOnly: true}}/>
-            </Animated.View>
+                    unitId={unitId}
+                    size={adSize}
+                    requestOptions={{requestNonPersonalizedAdsOnly: true}}
+                    onAdLoaded={() => setLoaded(true)}/>
+                {!loaded && <Skeleton styleProp={{width: 320, height: "100%", borderRadius: 10, position: "absolute"}}/>}
+            </HStack>
     )
 };

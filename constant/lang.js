@@ -1,6 +1,8 @@
 export const en_US = {
     // bottom_bar
     homepage: "Home",
+    favorites: "Favorites",
+    last_added: "Recent",
     markets: "Markets",
     settings: "Settings",
 
@@ -14,6 +16,7 @@ export const en_US = {
     // homepage
     happy: "Happy",
     recentlyAdded: "Recently Added",
+    rateTheApp: "Rate the app",
 
     // catalog
     offerStart: "Offer Starts At",
@@ -21,6 +24,7 @@ export const en_US = {
     products: "Products",
     shareDialog: "Share catalogs",
     noResultDialog: "We could not find an up-to-date catalog for the market you are looking for",
+    noFavoriteDialog: "It's so deserted here",
 
     // alert
     noConnection: "No internet connection"
@@ -28,6 +32,8 @@ export const en_US = {
 export const tr_TR = {
     // bottom_bar
     homepage: "Ana Sayfa",
+    favorites: "Favoriler",
+    last_added: "Eklenenler",
     markets: "Marketler",
     settings: "Ayarlar",
 
@@ -41,6 +47,7 @@ export const tr_TR = {
     // homepage
     happy: "Mutlu",
     recentlyAdded: "Son Eklenenler",
+    rateTheApp: "Puan verin",
 
     // catalog
     offerStart: "Kampanya Başlangıç",
@@ -48,9 +55,13 @@ export const tr_TR = {
     products: "Ürünler",
     shareDialog: "Katalogları paylaş",
     noResultDialog: "Aradığınız markete ait güncel katalog bulamadık",
+    noFavoriteDialog: "Buralar çok ıssız",
 
     // alert
     noConnection: "Sunucu bağlantı hatası"
 };
 
-export const getMessages = (lang) => lang === "tr_TR" ? tr_TR : en_US;
+export const getMessages = {
+    tr_TR,
+    en_US
+};

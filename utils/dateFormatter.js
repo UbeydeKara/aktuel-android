@@ -7,5 +7,5 @@ export const dateFormatter = (date, lang) => {
 
 export const formatMultipleDate = (date1, date2, lang) => {
     const locale = lang === "tr_TR" ? "tr" : "en";
-    return moment(date1).locale(locale).format("DD") + "-" + moment(date2).locale(locale).format("DD MMMM")
+    return moment(date1).locale(locale).format("DD MMM") + " - " + moment(date2).locale(locale).format("DD MMM")
 }
