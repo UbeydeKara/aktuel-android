@@ -1,6 +1,6 @@
 {
   "name": "aktuel_market",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -11,12 +11,12 @@
   "dependencies": {
     "@expo-google-fonts/public-sans": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
-    "@react-native-async-storage/async-storage": "1.18.2",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "expo": "~49.0.5",
     "expo-av": "~13.4.1",
     "expo-font": "~11.4.0",
+    "expo-notifications": "~0.20.1",
     "expo-splash-screen": "~0.20.4",
     "expo-status-bar": "~1.6.0",
     "moment": "^2.29.4",
@@ -24,10 +24,10 @@
     "react-native": "0.72.3",
     "react-native-google-mobile-ads": "^11.6.1",
     "react-native-image-pan-zoom": "^2.1.12",
+    "react-native-mmkv": "^2.10.1",
     "react-native-share": "^9.2.3",
     "react-native-svg": "13.9.0",
-    "react-redux": "^8.1.1",
-    "redux-persist": "^6.0.0"
+    "react-redux": "^8.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
