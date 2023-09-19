@@ -10,3 +10,5 @@ export const SET_MESSAGE = "SET_MESSAGE";
 
 export const SET_LANG = "SET_LANG";
 export const SET_THEME = "SET_THEME";
+export const ADD_FAVORITE = "ADD_FAVORITE";
+export const REMOVE_FAVORITE = "REMOVE_FAVORITE";

@@ -3,6 +3,8 @@ import Home from "./Home";
 import MarketCatalogs from "./MarketCatalogs";
 import Markets from "./Markets";
 import Settings from "./Settings";
+import Favorites from "./Favorites";
+import LastAdded from "./LastAdded";
 
 export const pages = [
     {
@@ -12,6 +14,14 @@ export const pages = [
     {
         key: "catalog",
         component: <Catalog/>
+    },
+    {
+        key: "favorites",
+        component: <Favorites/>
+    },
+    {
+        key: "last_added",
+        component: <LastAdded/>
     },
     {
         key: "market_catalogs",
